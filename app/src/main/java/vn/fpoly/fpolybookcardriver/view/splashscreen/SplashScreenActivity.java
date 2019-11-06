@@ -1,7 +1,5 @@
 package vn.fpoly.fpolybookcardriver.view.splashscreen;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -11,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.google.firebase.messaging.FirebaseMessaging;
+import androidx.appcompat.app.AppCompatActivity;
 
 import vn.fpoly.fpolybookcardriver.R;
 
