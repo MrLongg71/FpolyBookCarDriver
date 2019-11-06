@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardriver;
+package vn.fpoly.fpolybookcardriver.view.splashscreen;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import vn.fpoly.fpolybookcardriver.R;
 
 public class FragmentSplash extends Fragment {
     @Nullable
