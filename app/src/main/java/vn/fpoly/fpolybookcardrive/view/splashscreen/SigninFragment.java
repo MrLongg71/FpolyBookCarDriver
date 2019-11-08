@@ -1,5 +1,6 @@
-package vn.fpoly.fpolybookcardriver.view.splashscreen;
+package vn.fpoly.fpolybookcardrive.view.splashscreen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -14,7 +15,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import vn.fpoly.fpolybookcardriver.R;
+import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.Activity.HomeActivity;
+
 
 public class SigninFragment extends Fragment implements IViewLogin {
     private TextInputEditText tieEmail,tiePass;
@@ -43,7 +46,8 @@ public class SigninFragment extends Fragment implements IViewLogin {
 
     @Override
     public void onSuccess() {
-
+        Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(getActivity(), HomeActivity.class));
     }
 
     @Override
@@ -54,15 +58,15 @@ public class SigninFragment extends Fragment implements IViewLogin {
         String Email = tieEmail.getText().toString().trim();
         String Pass  = tiePass.getText().toString().trim();
         if (Email.length() == 0 ){
-            tieEmail.setError("Please enter a username,phone");
+            tieEmail.setError("Please enter iconapp username,phone");
             tieEmail.requestFocus();
             return true;
         }else if (Pass.length() == 0 ){
-            tiePass.setError("Please enter a password");
+            tiePass.setError("Please enter iconapp password");
             tiePass.requestFocus();
             return true;
         }else if (!Patterns.EMAIL_ADDRESS.matcher(Email).matches()){
-            tieEmail.setError("Please enter a valid email address");
+            tieEmail.setError("Please enter iconapp valid email address");
             tieEmail.requestFocus();
             return true;
         }else if (Pass.length() < 6 ){
@@ -71,7 +75,6 @@ public class SigninFragment extends Fragment implements IViewLogin {
             return true;
         }else {
             presenterLogin.doSignin(Email,Pass);
-            Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
         }
 
         return false;

@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardriver.model.objectclass;
+package vn.fpoly.fpolybookcardrive.model.objectclass;
 
 public class Driver {
     private String keydriver;

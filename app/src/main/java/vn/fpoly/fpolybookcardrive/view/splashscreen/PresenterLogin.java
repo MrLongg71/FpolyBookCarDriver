@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardriver.view.splashscreen;
+package vn.fpoly.fpolybookcardrive.view.splashscreen;
 
 import androidx.annotation.NonNull;
 

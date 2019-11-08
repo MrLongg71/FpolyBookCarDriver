@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardriver.service;
+package vn.fpoly.fpolybookcardrive.service;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,12 +11,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import vn.fpoly.fpolybookcardriver.R;
-import vn.fpoly.fpolybookcardriver.view.splashscreen.SplashScreenActivity;
+import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.Activity.SplashScreenActivity;
 
 public class FirebaseCloudMessage extends FirebaseMessagingService {
 
@@ -28,7 +27,7 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
         }
 
         Log.d("LONG123456", remoteMessage.getData() + " " + remoteMessage.getNotification().getTitle());
-        // Check if message contains a notification payload.
+        // Check if message contains iconapp notification payload.
         if (remoteMessage.getNotification() != null) {
 
         }

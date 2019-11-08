@@ -1,11 +1,11 @@
-package vn.fpoly.fpolybookcardriver.Activity;
-
-import android.os.Bundle;
+package vn.fpoly.fpolybookcardrive.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import vn.fpoly.fpolybookcardriver.R;
-import vn.fpoly.fpolybookcardriver.view.splashscreen.FragmentSplash;
+import android.os.Bundle;
+
+import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.FragmentSplash;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,8 +14,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver);
         initView();
+
     }
     private void initView() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_driver, new FragmentSplash()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_driver,new FragmentSplash()).commit();
+
     }
 }

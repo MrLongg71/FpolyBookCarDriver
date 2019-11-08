@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardriver.view.splashscreen;
+package vn.fpoly.fpolybookcardrive.view.splashscreen;
 
 public interface IViewLogin {
     void onSuccess();
