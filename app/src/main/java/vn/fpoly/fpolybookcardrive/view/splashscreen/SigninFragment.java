@@ -46,7 +46,6 @@ public class SigninFragment extends Fragment implements IViewLogin {
 
     @Override
     public void onSuccess() {
-        Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(getActivity(), HomeActivity.class));
     }
 

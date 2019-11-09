@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="vn.fpoly.fpolybookcardrive">
-<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/iconapp"
@@ -15,26 +21,26 @@
             android:value="@string/google_map_api" />
 
         <activity android:name=".Activity.HomeActivity">
-
-
-        </activity>
-        <activity android:name=".Activity.MainActivity"></activity>
-        <activity android:name=".Activity.SplashScreenActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+
+        </activity>
+        <activity android:name=".Activity.MainActivity"></activity>
+        <activity android:name=".Activity.SplashScreenActivity">
+
+
         </activity>
 
         <!--<service-->
-            <!--android:name=".fribase.FireBaseMess"-->
-            <!--android:exported="false">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-            <!--</intent-filter>-->
+        <!--android:name=".fribase.FireBaseMess"-->
+        <!--android:exported="false">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+        <!--</intent-filter>-->
         <!--</service>-->
     </application>
 
