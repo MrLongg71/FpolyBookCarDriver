@@ -2,6 +2,7 @@ package vn.fpoly.fpolybookcardrive.view.splashscreen.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import vn.fpoly.fpolybookcardrive.BuildConfig;
 import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.service.FirebaseCloudMessage;
 
 
 public class FragmentHome extends Fragment implements  OnMapReadyCallback, com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -64,6 +66,10 @@ public class FragmentHome extends Fragment implements  OnMapReadyCallback, com.g
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
+
+        getToken();
+
+
         mapFragment.getMapAsync(this);
         aSwitch.setEnabled(false);
 
@@ -81,6 +87,10 @@ public class FragmentHome extends Fragment implements  OnMapReadyCallback, com.g
                 .build();
 
         return view;
+    }
+
+    private void getToken() {
+        getActivity().startService(new Intent(getActivity(), FirebaseCloudMessage.class));
     }
 
     private void initView(View view) {
