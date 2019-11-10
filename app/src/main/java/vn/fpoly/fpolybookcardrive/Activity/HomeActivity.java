@@ -13,9 +13,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import vn.fpoly.fpolybookcardrive.R;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.FragmentHome;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.FragmentShowMore;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.FragmentStatical;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.FragmentHome;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.FragmentShowMore;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.FragmentStatical;
 
 public class HomeActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        FirebaseMessaging.getInstance().subscribeToTopic(firebaseAuth.getCurrentUser().getUid());
+//        FirebaseMessaging.getInstance().subscribeToTopic(firebaseAuth.getCurrentUser().getUid());
 
     }
 

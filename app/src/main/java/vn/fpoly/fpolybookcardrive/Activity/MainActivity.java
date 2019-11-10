@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import vn.fpoly.fpolybookcardrive.R;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.FragmentSplash;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.FragmentSplash;
 
 public class MainActivity extends AppCompatActivity {
 

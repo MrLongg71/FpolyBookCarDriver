@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardrive.view.splashscreen;
+package vn.fpoly.fpolybookcardrive.view.splashscreen.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

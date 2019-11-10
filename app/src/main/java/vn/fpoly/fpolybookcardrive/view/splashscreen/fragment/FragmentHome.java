@@ -1,11 +1,14 @@
-package vn.fpoly.fpolybookcardrive.view.splashscreen;
+package vn.fpoly.fpolybookcardrive.view.splashscreen.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,7 +44,7 @@ import vn.fpoly.fpolybookcardrive.BuildConfig;
 import vn.fpoly.fpolybookcardrive.R;
 
 
-public class FragmentHome extends Fragment implements View.OnClickListener, OnMapReadyCallback, com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class FragmentHome extends Fragment implements  OnMapReadyCallback, com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private LinearLayout linearLayout;
     private ImageButton imageButton;
     private Switch aSwitch;
@@ -55,7 +59,6 @@ public class FragmentHome extends Fragment implements View.OnClickListener, OnMa
     private GoogleMap map;
     private SupportMapFragment mapFragment;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,18 +66,19 @@ public class FragmentHome extends Fragment implements View.OnClickListener, OnMa
         initView(view);
         mapFragment.getMapAsync(this);
         aSwitch.setEnabled(false);
-        imageButton.setOnClickListener(this);
 
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        mGoogleApiClient.connect();
 
         return view;
     }
@@ -88,16 +92,45 @@ public class FragmentHome extends Fragment implements View.OnClickListener, OnMa
 
     }
 
+    @SuppressLint("MissingPermission")
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.imgButton:
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        map.getUiSettings().setCompassEnabled(true);
+
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
+
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setTrafficEnabled(true);
+
+    }
+
+    private void addMarker(LatLng location, String place,int icon) {
+//        new Handler().postDelayed(new Runnable() {
+////            @Override
+////            public void run() {
+////
+////            }
+////        },10000);
+        map.clear();
+       final Marker marker =  map.addMarker(new MarkerOptions().position(location).title(place).icon(BitmapDescriptorFactory.fromResource(icon)));
+        marker.setVisible(false);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 if (checked) {
+                    marker.setVisible(false);
                     checked = !checked;
                     linearLayout.setBackgroundResource(R.drawable.custom_unchecked);
+
                     aSwitch.setEnabled(false);
                     aSwitch.setChecked(false);
+                    map.setMyLocationEnabled(true);
                 } else {
+                    marker.setVisible(true);
                     checked = !checked;
                     linearLayout.setBackgroundResource(R.drawable.custom_checked);
                     aSwitch.setEnabled(true);
@@ -113,48 +146,29 @@ public class FragmentHome extends Fragment implements View.OnClickListener, OnMa
                             }
                         }
                     });
-
-
+                    map.setMyLocationEnabled(false);
 
                 }
-                break;
-        }
-    }
+            }
+        });
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setCompassEnabled(true);
-        map.getUiSettings().setMyLocationButtonEnabled(true);
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setTrafficEnabled(true);
-
-    }
-
-    private void addMarker(LatLng location, String place, int icon) {
-//        map.addMarker(new MarkerOptions().position(location).title(place).icon(BitmapDescriptorFactory.fromResource(icon)));
-
-        Marker marker = map.addMarker(new MarkerOptions().position(location).title(place).icon(BitmapDescriptorFactory.fromResource(icon)));
-        marker.setVisible(false);
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
+
             latitude = location.getLatitude();
             longitude = location.getLongitude();
             placeNameCurrent = "You are here!";
+
             locationcurrent = new LatLng(latitude, longitude);
-            addMarker(locationcurrent, placeNameCurrent, R.drawable.iconmarker);
+
+            addMarker(locationcurrent, placeNameCurrent,R.drawable.iconmarker);
 
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurrent, 14);
             map.moveCamera(cameraUpdate);
+
         }
     }
 
@@ -175,5 +189,15 @@ public class FragmentHome extends Fragment implements View.OnClickListener, OnMa
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+    @Override
+    public void onStop() {
+        mGoogleApiClient.disconnect();
 
+        super.onStop();
+    }
+    @Override
+    public void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 }
