@@ -36,6 +36,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
+    implementation 'com.emredavarci:CircleProgressBar:1.0.8'
 
 
     //** FireBase**//

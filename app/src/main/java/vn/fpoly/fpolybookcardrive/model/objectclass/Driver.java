@@ -9,17 +9,11 @@ public class Driver {
     private double latitude;
     private double longitude;
     private int rate;
-    private boolean statust;
+    private int distance;
+    private int time;
+    private String token;
+    private boolean status;
     private boolean working;
-
-
-    public String getKeydriver() {
-        return keydriver;
-    }
-
-    public void setKeydriver(String keydriver) {
-        this.keydriver = keydriver;
-    }
 
     public String getEmail() {
         return email;
@@ -77,12 +71,36 @@ public class Driver {
         this.rate = rate;
     }
 
-    public boolean isStatust() {
-        return statust;
+    public int getDistance() {
+        return distance;
     }
 
-    public void setStatust(boolean statust) {
-        this.statust = statust;
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public boolean isWorking() {
@@ -96,7 +114,15 @@ public class Driver {
     public Driver() {
     }
 
-    public Driver(String keydriver, String email, String name, String phone, String licenseplate, double latitude, double longitude, int rate, boolean statust, boolean working) {
+    public String getKeydriver() {
+        return keydriver;
+    }
+
+    public void setKeydriver(String keydriver) {
+        this.keydriver = keydriver;
+    }
+
+    public Driver(String keydriver, String email, String name, String phone, String licenseplate, double latitude, double longitude, int rate, int distance, int time, String token, boolean status, boolean working) {
         this.keydriver = keydriver;
         this.email = email;
         this.name = name;
@@ -105,7 +131,10 @@ public class Driver {
         this.latitude = latitude;
         this.longitude = longitude;
         this.rate = rate;
-        this.statust = statust;
+        this.distance = distance;
+        this.time = time;
+        this.token = token;
+        this.status = status;
         this.working = working;
     }
 }

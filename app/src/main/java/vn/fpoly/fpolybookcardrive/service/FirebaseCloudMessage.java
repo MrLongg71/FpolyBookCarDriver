@@ -10,6 +10,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,6 +21,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
 
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.Activity.SplashScreenActivity;
@@ -33,6 +35,11 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage.getData().size() > 0) {
+            Intent intent = new Intent("myFunction");
+            // add data
+            intent.putExtra("value1", remoteMessage.getData().get("title"));
+            intent.putExtra("value2", remoteMessage.getData().get("author"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             showNotification(remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"));
         }
     }
@@ -53,6 +60,7 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (task.isSuccessful()) {
                             onNewToken(task.getResult().getToken());
+                            Log.d("kiemtratokent",task.getResult().getToken());
                         }
                     }
                 });
@@ -71,8 +79,6 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
 
     private void showNotification(String idOrder, String idDriver) {
         //xu li dialog,call du lieu, goi sang 1 file khac, dung viet trong service nha leader
-
-
         Log.d("idOrder",idOrder + " - "  + idDriver);
 //        Intent intent = new Intent(this, SplashScreenActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
