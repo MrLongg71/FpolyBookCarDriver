@@ -25,10 +25,12 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.Activity.SplashScreenActivity;
+import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
 
 public class FirebaseCloudMessage extends FirebaseMessagingService {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+
     DatabaseReference dataDriver = FirebaseDatabase.getInstance().getReference();
 
     @Override
@@ -37,10 +39,11 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Intent intent = new Intent("myFunction");
             // add data
-            intent.putExtra("value1", remoteMessage.getData().get("title"));
-            intent.putExtra("value2", remoteMessage.getData().get("author"));
+            intent.putExtra("idOrder", remoteMessage.getData().get("idOrder"));
+            intent.putExtra("idDriver", remoteMessage.getData().get("idDriver"));
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             showNotification(remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"));
+
         }
     }
 
@@ -73,13 +76,17 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
     }
 
     private void sendTokenToServer(String s) {
+
         dataDriver.child("Driver").child("Car").child(auth.getCurrentUser().getUid()).child("token").setValue(s);
+
 
     }
 
     private void showNotification(String idOrder, String idDriver) {
+
+
         //xu li dialog,call du lieu, goi sang 1 file khac, dung viet trong service nha leader
-        Log.d("idOrder",idOrder + " - "  + idDriver);
+
 //        Intent intent = new Intent(this, SplashScreenActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,

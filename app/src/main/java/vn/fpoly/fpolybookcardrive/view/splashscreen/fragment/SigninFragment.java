@@ -1,6 +1,5 @@
 package vn.fpoly.fpolybookcardrive.view.splashscreen.fragment;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,43 +35,27 @@ import vn.fpoly.fpolybookcardrive.view.splashscreen.PresenterLogin;
 public class SigninFragment extends Fragment implements IViewLogin {
     private TextInputEditText tieEmail,tiePass;
     private PresenterLogin presenterLogin;
-    private Button btnLogin,btnregister;
-    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private EditText edtuser,edtpass;
-    private SpotsDialog spotsDialog;
+    private Button btnLogin;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmentlogin, container, false);
         initView(view);
+        tieEmail.setText("driver3@gmail.com");
+        tiePass.setText("123456");
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkValid();
+
+
             }
         });
-        btnregister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               final   String ten = edtuser.getText().toString();
-                String pass = edtpass.getText().toString();
-                Log.d("kiemtranhan","vo");
-                firebaseAuth.createUserWithEmailAndPassword(ten,pass).addOnCompleteListener(getActivity(),new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("kiemtranhan","vo1");
-                        if (task.isSuccessful()){
-                            Log.d("kiemtranhan","thanhcong");
-                    databaseReference.child("Driver").child("Car").child(firebaseAuth.getCurrentUser().getUid()).setValue(new Driver(firebaseAuth.getCurrentUser().getUid(),ten,"abc","123","456",5.0,1.5,5,5,13,"",true,false));
-                            Toast.makeText(getActivity(), "cc", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Log.d("kiemtra","fail");
-                        }
-                    }
-                });
-            }
-        });
+
         return view;
     }
     private void initView(View view){
@@ -80,16 +63,17 @@ public class SigninFragment extends Fragment implements IViewLogin {
         tiePass         = view.findViewById(R.id.edtPassLogin);
         presenterLogin  = new PresenterLogin(this);
         btnLogin        = view.findViewById(R.id.btnLoginHome);
-        edtpass         = view.findViewById(R.id.edtpass1);
-        edtuser         = view.findViewById(R.id.edtusr);
-        btnregister     = view.findViewById(R.id.btndangky);
     }
 
     @Override
     public void onSuccess() {
         Dialog.DialogLoading(getActivity(),true);
-        startActivity(new Intent(getActivity(), HomeActivity.class));
+        String Uid =  firebaseAuth.getCurrentUser().getUid();
+        Intent intent = new Intent(getActivity(),HomeActivity.class);
+        intent.putExtra("Uid",Uid);
+        startActivity(intent);
         getActivity().finish();
+
     }
 
     @Override
@@ -100,6 +84,7 @@ public class SigninFragment extends Fragment implements IViewLogin {
     private boolean checkValid(){
         String Email = tieEmail.getText().toString().trim();
         String Pass  = tiePass.getText().toString().trim();
+
         if (Email.length() == 0 ){
             tieEmail.setError("Please enter iconapp username,phone");
             tieEmail.requestFocus();
@@ -118,6 +103,7 @@ public class SigninFragment extends Fragment implements IViewLogin {
             return true;
         }else {
             presenterLogin.doSignin(Email,Pass);
+
         }
 
         return false;

@@ -1,5 +1,7 @@
 package vn.fpoly.fpolybookcardrive.view.splashscreen;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,10 +20,12 @@ public class PresenterLogin implements IPresenterLogin {
 
     @Override
     public void doSignin(String email, String passs) {
+
         firebaseAuth.signInWithEmailAndPassword(email,passs).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+
                     iViewLogin.onSuccess();
                 }else {
                     iViewLogin.onFail();

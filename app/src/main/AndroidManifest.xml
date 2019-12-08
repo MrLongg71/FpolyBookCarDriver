@@ -21,7 +21,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api" />
 
-        <activity android:name=".Activity.HomeActivity"></activity>
+        <activity android:name=".Activity.HomeActivity" />
         <activity android:name=".Activity.MainActivity" />
         <activity android:name=".Activity.SplashScreenActivity">
             <intent-filter>

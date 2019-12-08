@@ -39,8 +39,6 @@ import vn.fpoly.fpolybookcardrive.R;
 
 
 public class SplashScreenActivity extends AppCompatActivity {
-    private Handler handler;
-    private LinearLayout layoutCarSlash;
     private ImageView imgCarLeft, imgCarRight;
     private int destLeft = 260;
     private int destRight = -260;
