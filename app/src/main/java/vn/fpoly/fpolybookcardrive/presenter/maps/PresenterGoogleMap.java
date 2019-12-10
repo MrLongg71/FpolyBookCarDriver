@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import vn.fpoly.fpolybookcardrive.model.modelorder.ModelOrder;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.IViewHome;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.home.IViewHome;
 
 public class PresenterGoogleMap  implements  IPresenterGoogleMap{
    private ModelOrder modelOrder;
@@ -28,9 +28,10 @@ public class PresenterGoogleMap  implements  IPresenterGoogleMap{
         modelOrder.dowloadOrderList(idOrder,Uid,this);
     }
 
+
     @Override
-    public void resultOrderCar(OrderCar orderCar) {
-        ivIewHome.displayOrder(orderCar);
+    public void resultOrderCar(OrderCar orderCar,String nameCustomer) {
+        ivIewHome.displayOrder(orderCar,nameCustomer);
     }
 
 

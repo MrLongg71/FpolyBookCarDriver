@@ -71,7 +71,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void initView() {
         imgCarLeft  = findViewById(R.id.imgIconCarLeft);
         imgCarRight = findViewById(R.id.imgIconCarRight);
-        txtDriver   = findViewById(R.id.txtDriver);
 
     }
 
@@ -124,7 +123,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         animatorSetRight.start();
 
         Animation animation = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.fadein);
-        txtDriver.startAnimation(animation);
+
 
         new Handler().postDelayed(new Runnable() {
             @Override

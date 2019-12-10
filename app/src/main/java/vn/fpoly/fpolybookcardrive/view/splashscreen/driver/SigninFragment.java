@@ -1,35 +1,27 @@
-package vn.fpoly.fpolybookcardrive.view.splashscreen.fragment;
+package vn.fpoly.fpolybookcardrive.view.splashscreen.driver;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import dmax.dialog.SpotsDialog;
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.Activity.HomeActivity;
 import vn.fpoly.fpolybookcardrive.library.Dialog;
-import vn.fpoly.fpolybookcardrive.model.objectclass.Driver;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.IViewLogin;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.PresenterLogin;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.driver.IViewLogin;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.driver.PresenterLogin;
 
 
 public class SigninFragment extends Fragment implements IViewLogin {

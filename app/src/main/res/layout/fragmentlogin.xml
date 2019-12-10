@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="Log in"
-            android:textColor="#212B47"
+            android:textColor="@color/fullapp"
             android:textSize="50dp"
             android:textStyle="bold" />
 
@@ -77,7 +77,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="serif"
             android:text="Forgot Password"
-            android:textColor="#FA8A04"
+            android:textColor="@color/fullapp"
             android:textStyle="bold" />
 
 
@@ -99,7 +99,7 @@
                 android:background="@drawable/custom_button_login"
                 android:padding="15dp"
                 android:text="Log In"
-                android:textColor="#14297A"
+                android:textColor="@color/fullapp"
                 android:textSize="18dp" />
 
 

@@ -46,13 +46,6 @@ public class ModelOrder {
             Polyline polyline = googleMap.addPolyline(polylineOptions);
             polyline.setColor(Color.rgb(72,155,250));
 
-//            if(locationCome == locationGo){
-//                Log.d("bbbbb",locationCome+"");
-//                Log.d("bbbbb1",locationGo+"");
-//                polyline.remove();
-//            }
-
-
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -66,7 +59,10 @@ public class ModelOrder {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 DataSnapshot nodeOrder = dataSnapshot.child("Order").child(Uid).child(idOrder);
                 OrderCar orderCar = nodeOrder.getValue(OrderCar.class);
-                presenterGoogleMap.resultOrderCar(orderCar);
+                DataSnapshot valuteNameCustomer = dataSnapshot.child("Client").child(orderCar.getKeyclient()).child("name");
+
+                String nameCustomer = valuteNameCustomer.getValue(String.class);
+                presenterGoogleMap.resultOrderCar(orderCar,nameCustomer);
 
             }
 

@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardrive.view.splashscreen.fragment;
+package vn.fpoly.fpolybookcardrive.view.splashscreen.home;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,53 +45,59 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Objects;
 
 import vn.fpoly.fpolybookcardrive.BuildConfig;
+import vn.fpoly.fpolybookcardrive.Constans;
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
 import vn.fpoly.fpolybookcardrive.service.FirebaseCloudMessage;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.other.FragmentPay;
 
 
 public class FragmentHome extends Fragment implements   com.google.android.gms.location.LocationListener,
         IViewHome,OnMapReadyCallback {
-    private LinearLayout linearLayout,linearLayoutPickUpCustomer;
+    private LinearLayout linearLayout,linearLayoutPickUpCustomer,linearLayoutDropOffCustomer;
     private ImageButton imageButton;
     private Switch aSwitch;
     private ImageView imageView;
-    private Button btnArrive,btnPickUp;
+    private Button btnArrive,btnPickUp,btnDropOff;
     private boolean checked = false;
-    private String placeNameCurrent ;
     private LatLng locationGo,locationCome,locationcurent;
     private PresenterGoogleMap presenterGoogleMap;
-    private TextView txtPickUp,txtDestination,txtDeny,txtEstimatePrice,txtKm;
-    private RelativeLayout btnAcceppt,btnCall,btnChat;
-    private double latitude = 0;
-    private double longitude = 0;
+    private TextView txtPickUp;
+    private TextView txtDestination;
+    private TextView txtEstimatePrice;
+    private TextView txtKm;
+    private RelativeLayout btnCall;
+    private RelativeLayout btnChat;
     private int clickCount = 0;
     private LocationManager locationManager;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private GoogleMap map;
     private SupportMapFragment mapFragment;
-
+    private String keyOrder;
     private AlertDialog alertDialog;
     private String Uid;
+    private String namecustomer;
+    private OrderCar ordercar = new OrderCar();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
-        Uid = getActivity().getIntent().getStringExtra("Uid");
+        Uid = Objects.requireNonNull(getActivity()).getIntent().getStringExtra("Uid");
         getToken();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,new IntentFilter("myFunction"));
         mapFragment.getMapAsync(this);
         aSwitch.setEnabled(false);
         getLocationDriver();
 
+
         return view;
     }
 
     private void getToken() {
-        getActivity().startService(new Intent(getActivity(), FirebaseCloudMessage.class));
+        Objects.requireNonNull(getActivity()).startService(new Intent(getActivity(), FirebaseCloudMessage.class));
     }
 
     private void initView(View view) {
@@ -100,14 +105,17 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
         imageButton                 = view.findViewById(R.id.imgButton);
         aSwitch                     = view.findViewById(R.id.swich);
         imageView                   = view.findViewById(R.id.imgThunder);
-        locationManager             = getActivity().getSystemService(LocationManager.class);
+        locationManager             = Objects.requireNonNull(getActivity()).getSystemService(LocationManager.class);
         mapFragment                 = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         presenterGoogleMap          = new PresenterGoogleMap(this);
         linearLayoutPickUpCustomer  = view.findViewById(R.id.dialog_pickUpCustomer);
         btnArrive                   = view.findViewById(R.id.btnArrive);
         btnCall                     = view.findViewById(R.id.relativeCall);
         btnPickUp                   = view.findViewById(R.id.btnPickUp);
+        btnDropOff                  = view.findViewById(R.id.btnDropOff);
         btnChat                     = view.findViewById(R.id.relativeChat);
+        linearLayoutDropOffCustomer = view.findViewById(R.id.dialog_dropoffCustomer);
+
     }
 
     @SuppressLint("MissingPermission")
@@ -121,11 +129,11 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
     }
 
-    private void addMarkerDriver(LatLng location, String place,int icon) {
+    private void addMarkerDriver(LatLng location, String place) {
 
-       final Marker marker =  map.addMarker(new MarkerOptions().position(location).title(place).icon(BitmapDescriptorFactory.fromResource(icon)));
+       final Marker marker =  map.addMarker(new MarkerOptions().position(location).title(place).icon(BitmapDescriptorFactory.fromResource(R.drawable.iconmarker)));
         marker.setVisible(false);
-        final String Uid = getActivity().getIntent().getStringExtra("Uid");
+        final String Uid = Objects.requireNonNull(getActivity()).getIntent().getStringExtra("Uid");
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,15 +154,17 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                             if (b) {
-                                b = !b;
+//                                b = !b;
+                                b = false;
                                 imageView.setBackgroundResource(R.drawable.thunderon);
-                                databaseReference.child("Driver").child("Car").child(Uid).child("status").setValue(true);
+                                databaseReference.child("Driver").child("Car").child(Objects.requireNonNull(Uid)).child("status").setValue(true);
 
 
                             } else {
-                                b = !b;
+//                                b = !b;
+                                b = true;
                                 imageView.setBackgroundResource(R.drawable.thunderof);
-                                databaseReference.child("Driver").child("Car").child(Uid).child("status").setValue(false);
+                                databaseReference.child("Driver").child("Car").child(Objects.requireNonNull(Uid)).child("status").setValue(false);
                             }
                         }
                     });
@@ -169,19 +179,19 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-            placeNameCurrent = "You are here!";
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            String placeNameCurrent = "You are here!";
             locationcurent = new LatLng(latitude, longitude);
-            addMarkerDriver(locationcurent, placeNameCurrent,R.drawable.iconmarker);
-            pus CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurent, 14);
+            addMarkerDriver(locationcurent, placeNameCurrent);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurent, 14);
             map.moveCamera(cameraUpdate);
 
         }
     }
 
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String idOrder = intent.getStringExtra("idOrder");
@@ -198,7 +208,7 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void displayOrder(OrderCar orderCar) {
+    public void displayOrder(OrderCar orderCar,String nameCustomer) {
         txtPickUp.setText(orderCar.getPlacenamego());
         txtDestination.setText(orderCar.getPlacenamecome());
         txtEstimatePrice.setText(orderCar.getPrice()+ " K");
@@ -206,6 +216,9 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
         alertDialog.show();
         locationCome = new LatLng(orderCar.getLatitudecome(), orderCar.getLongitudecome());
         locationGo  = new LatLng(orderCar.getLatitudego(),orderCar.getLongitudego() );
+        keyOrder = orderCar.getKeyOrder();
+        ordercar = orderCar;
+        namecustomer = nameCustomer;
 
     }
 
@@ -216,20 +229,18 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
         @SuppressLint("InflateParams") View viewDialogPickUp = layoutInflater.inflate(R.layout.custom_dialog_receive_car, null);
         txtPickUp           = viewDialogPickUp.findViewById(R.id.txtPickUp);
         txtDestination      = viewDialogPickUp.findViewById(R.id.txtDestination);
-        btnAcceppt          = viewDialogPickUp.findViewById(R.id.btnAccept);
-        txtDeny             = viewDialogPickUp.findViewById(R.id.txtDeny);
-        txtEstimatePrice     = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
+        RelativeLayout btnAccept = viewDialogPickUp.findViewById(R.id.btnAccept);
+        TextView txtDeny = viewDialogPickUp.findViewById(R.id.txtDeny);
+        txtEstimatePrice    = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
         txtKm               = viewDialogPickUp.findViewById(R.id.txtKm);
         builder.setView(viewDialogPickUp);
         alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
 
-        btnAcceppt.setOnClickListener(new View.OnClickListener() {
+        btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dialogContactCustomer();
-
                 addMarkerCustomer_LocationCome(locationGo,"Customer",R.drawable.iconraisehand);
                 addMarkerCustomer_LocationCome(locationCome,"Destination",R.drawable.iconyellow);
 
@@ -293,7 +304,10 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
             public void onClick(View view) {
                 clickCount += clickCount;
                 if (clickCount == 0) {
+                    map.clear();
                     presenterGoogleMap.getPolyline(getActivity(), map, locationGo, locationCome);
+                    addMarkerCustomer_LocationCome(locationCome,"Destination",R.drawable.iconyellow);
+                    addMarkerCustomer_LocationCome(locationGo,"Customer",R.drawable.iconraisehand);
 
                 } else {
                     btnArrive.setEnabled(false);
@@ -315,9 +329,32 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
         btnPickUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Pickup", Toast.LENGTH_SHORT).show();
+                dialogDropOffCustomer();
+                linearLayoutPickUpCustomer.setVisibility(View.GONE);
+                alertDialog.dismiss();
+
             }
         });
+    }
+
+    private void dialogDropOffCustomer(){
+        linearLayoutDropOffCustomer.setVisibility(View.VISIBLE);
+        linearLayoutDropOffCustomer.setFocusable(true);
+        linearLayoutDropOffCustomer.setClickable(true);
+        btnDropOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                databaseReference.child(Constans.childOrder).child(Uid).child(keyOrder).child("fisnish").setValue(true);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Constans.KEY_BUNDEL_ORDER,ordercar);
+                bundle.putString(Constans.KEY_BUNDEL_NAMECUSTOMER,namecustomer);
+                FragmentPay fragmentPay = new FragmentPay();
+                fragmentPay.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPay).commit();
+                alertDialog.dismiss();
+            }
+        });
+
     }
 
 }

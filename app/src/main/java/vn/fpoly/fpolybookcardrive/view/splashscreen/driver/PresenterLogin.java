@@ -1,6 +1,4 @@
-package vn.fpoly.fpolybookcardrive.view.splashscreen;
-
-import android.util.Log;
+package vn.fpoly.fpolybookcardrive.view.splashscreen.driver;
 
 import androidx.annotation.NonNull;
 

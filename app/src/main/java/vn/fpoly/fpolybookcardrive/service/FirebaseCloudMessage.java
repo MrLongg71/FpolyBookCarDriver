@@ -23,6 +23,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 
+import vn.fpoly.fpolybookcardrive.Constans;
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.Activity.SplashScreenActivity;
 import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
@@ -63,7 +64,7 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (task.isSuccessful()) {
                             onNewToken(task.getResult().getToken());
-                            Log.d("kiemtratokent",task.getResult().getToken());
+
                         }
                     }
                 });
@@ -77,7 +78,7 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
 
     private void sendTokenToServer(String s) {
 
-        dataDriver.child("Driver").child("Car").child(auth.getCurrentUser().getUid()).child("token").setValue(s);
+        dataDriver.child(Constans.childDriver).child("Car").child(auth.getCurrentUser().getUid()).child("token").setValue(s);
 
 
     }

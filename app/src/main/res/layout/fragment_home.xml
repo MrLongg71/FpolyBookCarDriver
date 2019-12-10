@@ -74,6 +74,13 @@
             android:visibility="gone">
 
         </include>
+        <include
+
+            android:id="@+id/dialog_dropoffCustomer"
+            layout="@layout/custom_dialog_dropoff_customer"
+            android:visibility="gone">
+
+        </include>
 
     </FrameLayout>
 

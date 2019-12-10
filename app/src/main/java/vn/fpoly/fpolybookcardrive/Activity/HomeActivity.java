@@ -1,44 +1,28 @@
 package vn.fpoly.fpolybookcardrive.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import vn.fpoly.fpolybookcardrive.R;
-import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.FragmentHome;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.FragmentShowMore;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.FragmentStatical;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.fragment.IViewHome;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.home.FragmentHome;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.showmore.FragmentShowMore;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.statistical.FragmentStatical;
 
 public class HomeActivity extends AppCompatActivity  {
-    BottomNavigationView bottomNavigationView;
+    public static BottomNavigationView bottomNavigationView;
 
 
     private PresenterGoogleMap presenterGoogleMap;
