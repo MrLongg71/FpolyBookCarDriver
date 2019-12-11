@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:layout_alignParentBottom="true"
-        android:background="#1F2235"
+        android:background="@color/fullapp"
         app:itemTextAppearanceActive="@style/BottomNavigation.ActiveItemTextAppearance"
         app:itemIconTint="#fff"
         app:itemTextColor="#fff"
