@@ -15,4 +15,6 @@ public class Constans {
     //** Key Bundel
     public static String KEY_BUNDEL_ORDER = "order";
     public static String KEY_BUNDEL_NAMECUSTOMER = "nameCustomer";
+    public static String KEY_BUNDEL_LONGITUDE_CURRENT = "longitude";
+    public static String KEY_BUNDEL_LATITUDE_CURRENT = "latitude";
 }

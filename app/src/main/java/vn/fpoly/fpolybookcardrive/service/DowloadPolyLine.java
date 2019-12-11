@@ -21,7 +21,6 @@ public class DowloadPolyLine extends AsyncTask<String,Void,String> {
             URL url = new URL(strings[0]);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
-//            Log.d("gggg","vo");
             InputStream inputStream = connection.getInputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);

@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.Objects;
@@ -47,13 +51,14 @@ import java.util.Objects;
 import vn.fpoly.fpolybookcardrive.BuildConfig;
 import vn.fpoly.fpolybookcardrive.Constans;
 import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.model.objectclass.Driver;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
 import vn.fpoly.fpolybookcardrive.service.FirebaseCloudMessage;
 import vn.fpoly.fpolybookcardrive.view.splashscreen.other.FragmentPay;
 
 
-public class FragmentHome extends Fragment implements   com.google.android.gms.location.LocationListener,
+public class FragmentHome extends Fragment implements
         IViewHome,OnMapReadyCallback {
     private LinearLayout linearLayout,linearLayoutPickUpCustomer,linearLayoutDropOffCustomer;
     private ImageButton imageButton;
@@ -63,22 +68,17 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
     private boolean checked = false;
     private LatLng locationGo,locationCome,locationcurent;
     private PresenterGoogleMap presenterGoogleMap;
-    private TextView txtPickUp;
-    private TextView txtDestination;
-    private TextView txtEstimatePrice;
-    private TextView txtKm;
-    private RelativeLayout btnCall;
-    private RelativeLayout btnChat;
+    private TextView txtPickUp,txtDestination,txtEstimatePrice,txtKm;
+    private RelativeLayout btnCall,btnChat;
     private int clickCount = 0;
     private LocationManager locationManager;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private GoogleMap map;
     private SupportMapFragment mapFragment;
-    private String keyOrder;
+    private String keyOrder,Uid,namecustomer;
     private AlertDialog alertDialog;
-    private String Uid;
-    private String namecustomer;
     private OrderCar ordercar = new OrderCar();
+    private Driver driverr = new Driver();
 
     @Nullable
     @Override
@@ -91,12 +91,24 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
         mapFragment.getMapAsync(this);
         aSwitch.setEnabled(false);
         getLocationDriver();
-
-
         return view;
     }
 
     private void getToken() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                DataSnapshot nodeDriver = dataSnapshot.child(Constans.childDriver).child("Car").child(Uid);
+                Driver driver = nodeDriver.getValue(Driver.class);
+               driverr = driver;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        databaseReference.addValueEventListener(valueEventListener);
         Objects.requireNonNull(getActivity()).startService(new Intent(getActivity(), FirebaseCloudMessage.class));
     }
 
@@ -133,7 +145,6 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
 
        final Marker marker =  map.addMarker(new MarkerOptions().position(location).title(place).icon(BitmapDescriptorFactory.fromResource(R.drawable.iconmarker)));
         marker.setVisible(false);
-        final String Uid = Objects.requireNonNull(getActivity()).getIntent().getStringExtra("Uid");
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,17 +165,14 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                             if (b) {
-//                                b = !b;
-                                b = false;
-                                imageView.setBackgroundResource(R.drawable.thunderon);
-                                databaseReference.child("Driver").child("Car").child(Objects.requireNonNull(Uid)).child("status").setValue(true);
 
+                                imageView.setBackgroundResource(R.drawable.thunderon);
+                                databaseReference.child(Constans.childDriver).child("Car").child(Objects.requireNonNull(Uid)).child("status").setValue(true);
 
                             } else {
-//                                b = !b;
-                                b = true;
                                 imageView.setBackgroundResource(R.drawable.thunderof);
-                                databaseReference.child("Driver").child("Car").child(Objects.requireNonNull(Uid)).child("status").setValue(false);
+                                databaseReference.child(Constans.childDriver).child("Car").child(Objects.requireNonNull(Uid)).child("working").setValue(false);
+                                databaseReference.child(Constans.childDriver).child("Car").child(Objects.requireNonNull(Uid)).child("status").setValue(false);
                             }
                         }
                     });
@@ -176,30 +184,6 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
 
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            String placeNameCurrent = "You are here!";
-            locationcurent = new LatLng(latitude, longitude);
-            addMarkerDriver(locationcurent, placeNameCurrent);
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurent, 14);
-            map.moveCamera(cameraUpdate);
-
-        }
-    }
-
-
-    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String idOrder = intent.getStringExtra("idOrder");
-            presenterGoogleMap.getOrderCar(idOrder,Uid);
-            dialogPickUpCar();
-        }
-    };
-
 
     @Override
     public void drawPolyline() {
@@ -208,7 +192,7 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void displayOrder(OrderCar orderCar,String nameCustomer) {
+    public void displayOrder(OrderCar orderCar, String nameCustomer) {
         txtPickUp.setText(orderCar.getPlacenamego());
         txtDestination.setText(orderCar.getPlacenamecome());
         txtEstimatePrice.setText(orderCar.getPrice()+ " K");
@@ -223,16 +207,15 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
     }
 
     private  void dialogPickUpCar(){
-
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         LayoutInflater layoutInflater = getLayoutInflater();
         @SuppressLint("InflateParams") View viewDialogPickUp = layoutInflater.inflate(R.layout.custom_dialog_receive_car, null);
-        txtPickUp           = viewDialogPickUp.findViewById(R.id.txtPickUp);
-        txtDestination      = viewDialogPickUp.findViewById(R.id.txtDestination);
-        RelativeLayout btnAccept = viewDialogPickUp.findViewById(R.id.btnAccept);
-        TextView txtDeny = viewDialogPickUp.findViewById(R.id.txtDeny);
-        txtEstimatePrice    = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
-        txtKm               = viewDialogPickUp.findViewById(R.id.txtKm);
+        txtPickUp                   = viewDialogPickUp.findViewById(R.id.txtPickUp);
+        txtDestination              = viewDialogPickUp.findViewById(R.id.txtDestination);
+        RelativeLayout btnAccept    = viewDialogPickUp.findViewById(R.id.btnAccept);
+        TextView txtDeny            = viewDialogPickUp.findViewById(R.id.txtDeny);
+        txtEstimatePrice            = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
+        txtKm                       = viewDialogPickUp.findViewById(R.id.txtKm);
         builder.setView(viewDialogPickUp);
         alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
@@ -240,17 +223,21 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogContactCustomer();
-                addMarkerCustomer_LocationCome(locationGo,"Customer",R.drawable.iconraisehand);
-                addMarkerCustomer_LocationCome(locationCome,"Destination",R.drawable.iconyellow);
+                databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("working").setValue(true);
+                if (driverr.isWorking()){
+                    dialogContactCustomer();
+                    addMarkerCustomer_LocationCome(locationGo,"Customer",R.drawable.iconraisehand);
+                    addMarkerCustomer_LocationCome(locationCome,"Destination",R.drawable.iconyellow);
 
-                drawPolyline();
+                    drawPolyline();
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(locationGo).include(locationCome);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 100);
+                    map.animateCamera(cameraUpdate);
+                    alertDialog.dismiss();
+                }
 
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                builder.include(locationGo).include(locationCome);
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 100);
-                map.animateCamera(cameraUpdate);
-                alertDialog.dismiss();
+
             }
         });
         txtDeny.setOnClickListener(new View.OnClickListener() {
@@ -277,7 +264,13 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
                     @Override
                     public void onLocationChanged(Location location) {
                         locationcurent = new LatLng(location.getLatitude(), location.getLongitude());
-
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        String placeNameCurrent = "You are here!";
+                        locationcurent = new LatLng(latitude, longitude);
+                        addMarkerDriver(locationcurent, placeNameCurrent);
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurent, 14);
+                        map.moveCamera(cameraUpdate);
                     }
 
                     @Override
@@ -350,11 +343,29 @@ public class FragmentHome extends Fragment implements   com.google.android.gms.l
                 bundle.putString(Constans.KEY_BUNDEL_NAMECUSTOMER,namecustomer);
                 FragmentPay fragmentPay = new FragmentPay();
                 fragmentPay.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPay).commit();
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPay).commit();
                 alertDialog.dismiss();
             }
         });
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("working").setValue(false);
+        databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("status").setValue(false);
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (driverr.isStatus() && !driverr.isWorking()) {
+                String idOrder = intent.getStringExtra("idOrder");
+                presenterGoogleMap.getOrderCar(idOrder, Uid);
+                dialogPickUpCar();
+            }
+        }
+    };
 }

@@ -18,10 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import vn.fpoly.fpolybookcardrive.R;
-import vn.fpoly.fpolybookcardrive.Activity.HomeActivity;
+import vn.fpoly.fpolybookcardrive.activity.HomeActivity;
 import vn.fpoly.fpolybookcardrive.library.Dialog;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.driver.IViewLogin;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.driver.PresenterLogin;
 
 
 public class SigninFragment extends Fragment implements IViewLogin {
@@ -42,6 +40,8 @@ public class SigninFragment extends Fragment implements IViewLogin {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Dialog.DialogLoading(getActivity(),true);
+
                 checkValid();
 
 
@@ -59,7 +59,7 @@ public class SigninFragment extends Fragment implements IViewLogin {
 
     @Override
     public void onSuccess() {
-        Dialog.DialogLoading(getActivity(),true);
+        Dialog.DialogLoading(getActivity(),false);
         String Uid =  firebaseAuth.getCurrentUser().getUid();
         Intent intent = new Intent(getActivity(),HomeActivity.class);
         intent.putExtra("Uid",Uid);

@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
-import vn.fpoly.fpolybookcardrive.Activity.HomeActivity;
+import vn.fpoly.fpolybookcardrive.activity.HomeActivity;
 import vn.fpoly.fpolybookcardrive.Constans;
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
@@ -46,6 +46,7 @@ public class FragmentPay extends Fragment{
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_home,new FragmentHome()).commit();
+
             }
         });
 
@@ -62,4 +63,6 @@ public class FragmentPay extends Fragment{
         txtDate         = view.findViewById(R.id.txtDate);
         btnProceed      = view.findViewById(R.id.btnProceedConclusion);
     }
+
+
 }

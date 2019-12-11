@@ -9,4 +9,7 @@
     <string name="call">Call</string>
     <string name="arrive">arrive</string>
     <string name="pick_up">Pick up</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
 </resources>

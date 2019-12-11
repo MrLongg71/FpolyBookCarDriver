@@ -6,6 +6,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import vn.fpoly.fpolybookcardrive.model.modelorder.ModelOrder;
+import vn.fpoly.fpolybookcardrive.model.objectclass.Driver;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.view.splashscreen.home.IViewHome;
 
@@ -30,7 +31,7 @@ public class PresenterGoogleMap  implements  IPresenterGoogleMap{
 
 
     @Override
-    public void resultOrderCar(OrderCar orderCar,String nameCustomer) {
+    public void resultOrderCar(OrderCar orderCar, String nameCustomer) {
         ivIewHome.displayOrder(orderCar,nameCustomer);
     }
 

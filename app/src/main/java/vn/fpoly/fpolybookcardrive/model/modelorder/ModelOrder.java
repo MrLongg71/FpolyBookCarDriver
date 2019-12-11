@@ -2,7 +2,7 @@ package vn.fpoly.fpolybookcardrive.model.modelorder;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.util.Log;
+
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +10,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import vn.fpoly.fpolybookcardrive.Constans;
@@ -46,9 +47,7 @@ public class ModelOrder {
             Polyline polyline = googleMap.addPolyline(polylineOptions);
             polyline.setColor(Color.rgb(72,155,250));
 
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -57,11 +56,14 @@ public class ModelOrder {
         final ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                DataSnapshot nodeOrder = dataSnapshot.child("Order").child(Uid).child(idOrder);
-                OrderCar orderCar = nodeOrder.getValue(OrderCar.class);
-                DataSnapshot valuteNameCustomer = dataSnapshot.child("Client").child(orderCar.getKeyclient()).child("name");
+                DataSnapshot nodeOrder = dataSnapshot.child(Constans.childOrder).child(Uid).child(idOrder);
 
+                OrderCar orderCar = nodeOrder.getValue(OrderCar.class);
+                DataSnapshot valuteNameCustomer = dataSnapshot.child(Constans.childClient).child(Objects.requireNonNull(orderCar).getKeyclient()).child("name");
                 String nameCustomer = valuteNameCustomer.getValue(String.class);
+
+
+
                 presenterGoogleMap.resultOrderCar(orderCar,nameCustomer);
 
             }
@@ -72,8 +74,6 @@ public class ModelOrder {
             }
 
         };
-
-
         databaseReference.addValueEventListener(valueEventListener);
     }
 }
