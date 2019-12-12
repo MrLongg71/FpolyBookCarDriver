@@ -360,12 +360,13 @@ public class FragmentHome extends Fragment implements
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (driverr.isStatus() && !driverr.isWorking()) {
                 String idOrder = intent.getStringExtra("idOrder");
                 presenterGoogleMap.getOrderCar(idOrder, Uid);
                 dialogPickUpCar();
             }
+            String id = intent.getStringExtra("isBookCar");
+            Log.d("aaaaa",id+"");
         }
     };
 }

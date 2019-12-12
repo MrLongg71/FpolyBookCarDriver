@@ -32,6 +32,7 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
             // add data
             intent.putExtra("idOrder", remoteMessage.getData().get("idOrder"));
             intent.putExtra("idDriver", remoteMessage.getData().get("idDriver"));
+            intent.putExtra("isBookCar",remoteMessage.getData().get("isBookCar"));
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             showNotification(remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"));
 
