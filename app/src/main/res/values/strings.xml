@@ -12,6 +12,13 @@
     <string name="yesterday">Yesterday</string>
     <string name="day">Day</string>
     <string name="month">Month</string>
+
+    <string name="total">Total</string>
+
     <string name="order_food">Order Food</string>
     <string name="order_car">Order Car</string>
+    <string name="bill_detail">Bill Detail</string>
+    <string name="fotgot_password"><u>Fotgot password?</u></string>
+    <string name="quantity_of_goods">Quantity of goods:</string>
+
 </resources>

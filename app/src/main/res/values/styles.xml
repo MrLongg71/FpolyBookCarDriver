@@ -23,7 +23,7 @@
     </style>
     <style name="Switch" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->
-        <item name="colorControlActivated">#08FF00</item>
+        <item name="colorControlActivated">#fff</item>
 
         <!-- inactive thumb color -->
         <item name="colorSwitchThumbNormal">#f1f1f1
@@ -32,5 +32,10 @@
         <!-- inactive track color (30% transparency) -->
         <item name="android:colorForeground">#42221f1f
         </item>
+    </style>
+
+    <style name="FadeInAnimation">
+        <item name="android:windowEnterAnimation">@anim/fadein</item>
+
     </style>
 </resources>

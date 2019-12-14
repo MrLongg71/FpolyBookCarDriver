@@ -37,7 +37,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
     implementation 'com.emredavarci:CircleProgressBar:1.0.8'
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.ebanx:swipe-button:0.8.3'
+    implementation 'in.shadowfax:proswipebutton:1.2.2'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
     //** FireBase**//
     implementation 'com.google.firebase:firebase-analytics:17.2.1'

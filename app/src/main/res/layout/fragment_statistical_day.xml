@@ -114,7 +114,6 @@
 
 
 
-
             <LinearLayout
                 android:id="@+id/layoutHistoryOrder"
                 android:layout_width="match_parent"
@@ -154,6 +153,8 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/lineChart"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

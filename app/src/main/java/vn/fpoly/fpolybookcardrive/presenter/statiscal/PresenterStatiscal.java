@@ -22,11 +22,11 @@ import vn.fpoly.fpolybookcardrive.model.statiscal.ModelStatiscal;
 import vn.fpoly.fpolybookcardrive.view.splashscreen.statistical.IViewStatistical;
 
 public class PresenterStatiscal implements IPresenterStatiscal {
-    IViewStatistical iViewStatistical;
-    ModelStatiscal modelStatiscal;
-    Calendar calendar = Calendar.getInstance();
-    SimpleDateFormat simpleDateFormatDay = new SimpleDateFormat("dd");
-    SimpleDateFormat simpleDateFormatMonth = new SimpleDateFormat("MM");
+    private IViewStatistical iViewStatistical;
+    private ModelStatiscal modelStatiscal;
+    private Calendar calendar = Calendar.getInstance();
+    private SimpleDateFormat simpleDateFormatDay = new SimpleDateFormat("dd");
+    private SimpleDateFormat simpleDateFormatMonth = new SimpleDateFormat("MM");
     int yesterday = (Integer.parseInt(simpleDateFormatDay.format(calendar.getTime()))) - 1;
     int day = Integer.parseInt(simpleDateFormatDay.format(calendar.getTime()));
     int month = Integer.parseInt(simpleDateFormatMonth.format(calendar.getTime()));

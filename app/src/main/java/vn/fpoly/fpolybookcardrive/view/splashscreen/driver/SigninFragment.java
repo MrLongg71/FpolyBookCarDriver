@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,18 +25,17 @@ import vn.fpoly.fpolybookcardrive.library.Dialog;
 
 
 public class SigninFragment extends Fragment implements IViewLogin {
-    private TextInputEditText tieEmail,tiePass;
+    private EditText tieEmail,tiePass;
     private PresenterLogin presenterLogin;
     private Button btnLogin;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmentlogin, container, false);
         initView(view);
-        tieEmail.setText("driver3@gmail.com");
+        tieEmail.setText("driver2@gmail.com");
         tiePass.setText("123456");
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -69,8 +70,11 @@ public class SigninFragment extends Fragment implements IViewLogin {
     }
 
     @Override
-    public void onFail() {
-        Dialog.DialogLoading(getActivity(),true);
+    public void onFail(String message) {
+
+        //hàm viết dialog có vấn đề, không dismiss đuwojc, check lại nhanh lâm dăn mậo
+        Dialog.DialogLoading(getActivity(),false);
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
     }
     private boolean checkValid(){

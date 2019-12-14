@@ -1,6 +1,10 @@
 package vn.fpoly.fpolybookcardrive.model.objectclass;
 
-public class OrderFood {
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class OrderFood implements Parcelable {
     private String key,keyRestaurant,keyDriver,keyClient,keyBillDetail,date,placeNameRes,placeNameC;
     private double latitudeClient,longitudeClient,price,rate,distance;
     private boolean status,finish;
@@ -26,44 +30,40 @@ public class OrderFood {
     public OrderFood() {
     }
 
-    public String getPlaceNameRes() {
-        return placeNameRes;
+
+    protected OrderFood(Parcel in) {
+        key = in.readString();
+        keyRestaurant = in.readString();
+        keyDriver = in.readString();
+        keyClient = in.readString();
+        keyBillDetail = in.readString();
+        date = in.readString();
+        placeNameRes = in.readString();
+        placeNameC = in.readString();
+        latitudeClient = in.readDouble();
+        longitudeClient = in.readDouble();
+        price = in.readDouble();
+        rate = in.readDouble();
+        distance = in.readDouble();
+        status = in.readByte() != 0;
+        finish = in.readByte() != 0;
     }
 
-    public void setPlaceNameRes(String placeNameRes) {
-        this.placeNameRes = placeNameRes;
-    }
+    public static final Creator<OrderFood> CREATOR = new Creator<OrderFood>() {
+        @Override
+        public OrderFood createFromParcel(Parcel in) {
+            return new OrderFood(in);
+        }
 
-    public String getPlaceNameC() {
-        return placeNameC;
-    }
+        @Override
+        public OrderFood[] newArray(int size) {
+            return new OrderFood[size];
+        }
+    };
 
-    public void setPlaceNameC(String placeNameC) {
-        this.placeNameC = placeNameC;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public boolean isFinish() {
-        return finish;
-    }
-
-    public void setFinish(boolean finish) {
-        this.finish = finish;
-    }
-
-    public String getKeyBillDetail() {
-        return keyBillDetail;
-    }
-
-    public void setKeyBillDetail(String keyBillDetail) {
-        this.keyBillDetail = keyBillDetail;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public String getKey() {
@@ -98,12 +98,36 @@ public class OrderFood {
         this.keyClient = keyClient;
     }
 
+    public String getKeyBillDetail() {
+        return keyBillDetail;
+    }
+
+    public void setKeyBillDetail(String keyBillDetail) {
+        this.keyBillDetail = keyBillDetail;
+    }
+
     public String getDate() {
         return date;
     }
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getPlaceNameRes() {
+        return placeNameRes;
+    }
+
+    public void setPlaceNameRes(String placeNameRes) {
+        this.placeNameRes = placeNameRes;
+    }
+
+    public String getPlaceNameC() {
+        return placeNameC;
+    }
+
+    public void setPlaceNameC(String placeNameC) {
+        this.placeNameC = placeNameC;
     }
 
     public double getLatitudeClient() {
@@ -144,5 +168,44 @@ public class OrderFood {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean isFinish() {
+        return finish;
+    }
+
+    public void setFinish(boolean finish) {
+        this.finish = finish;
+    }
+
+    public static Creator<OrderFood> getCREATOR() {
+        return CREATOR;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(key);
+        dest.writeString(keyRestaurant);
+        dest.writeString(keyDriver);
+        dest.writeString(keyClient);
+        dest.writeString(keyBillDetail);
+        dest.writeString(date);
+        dest.writeString(placeNameRes);
+        dest.writeString(placeNameC);
+        dest.writeDouble(latitudeClient);
+        dest.writeDouble(longitudeClient);
+        dest.writeDouble(price);
+        dest.writeDouble(rate);
+        dest.writeDouble(distance);
+        dest.writeByte((byte) (status ? 1 : 0));
+        dest.writeByte((byte) (finish ? 1 : 0));
     }
 }

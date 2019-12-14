@@ -37,8 +37,8 @@ import vn.fpoly.fpolybookcardrive.view.splashscreen.statistical.IViewStatistical
 public class StaMonthFragment extends Fragment implements IViewStatistical, OnChartValueSelectedListener {
     private PresenterStatiscal presenterStatiscal;
     private TextView txtDate,txtTotalMoneySta,txtTotalJobSta;
-    private LinearLayout layoutHistoryOrder;
-    private PieChart mChart;
+    private LinearLayout layoutHistoryOrder,layoutChart;
+    private  PieChart mChart;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,13 +49,15 @@ public class StaMonthFragment extends Fragment implements IViewStatistical, OnCh
 
 
     private void initView(View view) {
-        presenterStatiscal = new PresenterStatiscal(this);
+        layoutChart                 = view.findViewById(R.id.lineChart);
+        layoutChart.setVisibility(View.VISIBLE);
+        presenterStatiscal          = new PresenterStatiscal(this);
         presenterStatiscal.getListOrder(3);
-        txtDate = view.findViewById(R.id.txtDate);
+        txtDate =    view.findViewById(R.id.txtDate);
         txtTotalJobSta = view.findViewById(R.id.txtTotalJobSta);
         txtTotalMoneySta = view.findViewById(R.id.txtTotalMoneySta);
         layoutHistoryOrder = view.findViewById(R.id.layoutHistoryOrder);
-        mChart = (PieChart) view.findViewById(R.id.piechart);
+        mChart =  view.findViewById(R.id.piechart);
         layoutHistoryOrder.setVisibility(View.GONE);
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormatDay = new SimpleDateFormat("dd");
@@ -68,10 +70,7 @@ public class StaMonthFragment extends Fragment implements IViewStatistical, OnCh
     public void displayListOrderDay(int total_Jobs, int total_money, ArrayList<OrderCar> orderCarArrayList, ArrayList<OrderFood> orderFoodArrayList) {
         txtTotalMoneySta.setText(total_money +"$");
         txtTotalJobSta.setText(total_Jobs+"");
-
-
         addDataSet(mChart,orderCarArrayList.size(),orderFoodArrayList.size());
-
         mChart.setOnChartValueSelectedListener(this);
     }
 
@@ -111,7 +110,7 @@ public class StaMonthFragment extends Fragment implements IViewStatistical, OnCh
 
         Legend legend = pieChart.getLegend();
         legend.setForm(Legend.LegendForm.CIRCLE);
-//        legend.setPosition(Legend.LEFT_OF_CHART);
+
 
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);

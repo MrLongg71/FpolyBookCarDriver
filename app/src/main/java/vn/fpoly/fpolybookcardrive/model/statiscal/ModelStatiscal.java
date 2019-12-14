@@ -18,8 +18,8 @@ import vn.fpoly.fpolybookcardrive.model.objectclass.OrderFood;
 import vn.fpoly.fpolybookcardrive.presenter.statiscal.PresenterStatiscal;
 
 public class ModelStatiscal {
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference dataOrder = FirebaseDatabase.getInstance().getReference();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference dataOrder = FirebaseDatabase.getInstance().getReference();
 
     public void DowloadListOrderCar(final PresenterStatiscal presenterStatiscal, final int i) {
         final ValueEventListener valueEventListener = new ValueEventListener() {

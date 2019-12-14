@@ -3,6 +3,7 @@ package vn.fpoly.fpolybookcardrive.library;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import dmax.dialog.SpotsDialog;
 
@@ -12,6 +13,7 @@ public class Dialog  {
         if(loading){
             alertDialog.show();
         }else {
+            Log.d("LONgKUTE", "DialogLoading: ");
             alertDialog.dismiss();
         }
     }

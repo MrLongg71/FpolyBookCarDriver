@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardrive.model.modelorder;
+package vn.fpoly.fpolybookcardrive.model.modelordercar;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -28,7 +28,7 @@ import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
 import vn.fpoly.fpolybookcardrive.service.DowloadPolyLine;
 import vn.fpoly.fpolybookcardrive.service.ParsePolyline;
 
-public class ModelOrder {
+public class ModelOrderCar {
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     public void dowloadPoylineList(Activity activity, GoogleMap googleMap, LatLng locationGo, LatLng locationCome, PresenterGoogleMap presenterGoogleMap) {
@@ -61,7 +61,6 @@ public class ModelOrder {
                 OrderCar orderCar = nodeOrder.getValue(OrderCar.class);
                 DataSnapshot valuteNameCustomer = dataSnapshot.child(Constans.childClient).child(Objects.requireNonNull(orderCar).getKeyclient()).child("name");
                 String nameCustomer = valuteNameCustomer.getValue(String.class);
-
 
 
                 presenterGoogleMap.resultOrderCar(orderCar,nameCustomer);

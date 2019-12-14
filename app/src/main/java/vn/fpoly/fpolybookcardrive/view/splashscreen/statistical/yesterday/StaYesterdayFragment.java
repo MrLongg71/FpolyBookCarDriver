@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderFood;
 import vn.fpoly.fpolybookcardrive.presenter.statiscal.PresenterStatiscal;
 import vn.fpoly.fpolybookcardrive.view.splashscreen.statistical.IViewStatistical;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.statistical.day.StaDayFragment;
 
 public class StaYesterdayFragment extends Fragment implements IViewStatistical {
     private PresenterStatiscal presenterStatiscal;
@@ -34,16 +36,17 @@ public class StaYesterdayFragment extends Fragment implements IViewStatistical {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistical_day,container,false);
-
         initView(view);
         return view;
     }
 
 
     private void initView(View view) {
+
         presenterStatiscal = new PresenterStatiscal(this);
         presenterStatiscal.getListOrder(1);
         txtDate = view.findViewById(R.id.txtDate);
+
         txtTotalJobSta = view.findViewById(R.id.txtTotalJobSta);
         txtTotalMoneySta = view.findViewById(R.id.txtTotalMoneySta);
         recyclerViewHistoryOrderCar = view.findViewById(R.id.recyclerViewHistoryOrderCar);
@@ -65,7 +68,6 @@ public class StaYesterdayFragment extends Fragment implements IViewStatistical {
         recyclerViewHistoryOrderCar.setAdapter(orderCarHistoryAdapter);
 
         OrderFoodHistoryAdapter orderFoodHistoryAdapter = new OrderFoodHistoryAdapter(getActivity(),R.layout.custom_item_order_history,orderFoodArrayList);
-
 
         LayoutManager manager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
         recyclerViewHistoryOrderFood.setLayoutManager(manager);
