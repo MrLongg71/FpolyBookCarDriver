@@ -55,7 +55,7 @@ import vn.fpoly.fpolybookcardrive.model.objectclass.Driver;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
 import vn.fpoly.fpolybookcardrive.service.FirebaseCloudMessage;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.other.FragmentPay;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.other.FragmentPayCar;
 
 
 public class FragmentHome extends Fragment implements
@@ -341,9 +341,9 @@ public class FragmentHome extends Fragment implements
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constans.KEY_BUNDEL_ORDER,ordercar);
                 bundle.putString(Constans.KEY_BUNDEL_NAMECUSTOMER,namecustomer);
-                FragmentPay fragmentPay = new FragmentPay();
-                fragmentPay.setArguments(bundle);
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPay).commit();
+                FragmentPayCar fragmentPayCar = new FragmentPayCar();
+                fragmentPayCar.setArguments(bundle);
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPayCar).commit();
                 alertDialog.dismiss();
             }
         });
@@ -361,10 +361,19 @@ public class FragmentHome extends Fragment implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (driverr.isStatus() && !driverr.isWorking()) {
+            String event = intent.getStringExtra("event");
+            
+            if (driverr.isStatus() && !driverr.isWorking() && event.equals("1")) {
+                Log.d("LONgKUTE", "onReceive: Car");
                 String idOrder = intent.getStringExtra("idOrder");
                 presenterGoogleMap.getOrderCar(idOrder, Uid);
                 dialogPickUpCar();
+            }
+            
+            if(event.equals("2")){
+                //logic food
+                Log.d("LONgKUTE", "onReceive: Food");
+                
             }
         }
     };
