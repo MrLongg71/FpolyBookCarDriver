@@ -1,8 +1,17 @@
 package vn.fpoly.fpolybookcardrive.service;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +26,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 
 import vn.fpoly.fpolybookcardrive.Constans;
+import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.activity.MainActivity;
 
 public class FirebaseCloudMessage extends FirebaseMessagingService {
 
@@ -32,9 +43,10 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
             // add data
             intent.putExtra("idOrder", remoteMessage.getData().get("idOrder"));
             intent.putExtra("idDriver", remoteMessage.getData().get("idDriver"));
-            intent.putExtra("isBookCar",remoteMessage.getData().get("isBookCar"));
+            intent.putExtra("event",remoteMessage.getData().get("event"));
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-            showNotification(remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"));
+//            showNotification(remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"));
+            showNotification(getApplicationContext(),remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"),intent);
 
         }
     }
@@ -74,9 +86,39 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
 
     }
 
-    private void showNotification(String idOrder, String idDriver) {
+    public void showNotification(Context context, String title, String body, Intent intent) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        int notificationId = 1;
+        String channelId = "channel-01";
+        String channelName = "Channel Name";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
 
+        Uri uriSound = Uri.parse("android.resource://"
+                + context.getPackageName() + "/" + R.raw.ringvngo);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
+                .setContentTitle("VNGO")
+                .setSmallIcon(R.drawable.icondri)
+                .setSound(uriSound)
+                .setContentText("You just got a new pickup!!");
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        notificationManager.notify(notificationId, mBuilder.build());
+//        mBuilder.sound = Uri.parse("android.resource://"
+//                + context.getPackageName() + "/" + R.raw.ringvngo.mp3);
     }
 }

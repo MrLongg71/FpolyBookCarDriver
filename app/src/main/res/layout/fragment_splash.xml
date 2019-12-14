@@ -12,11 +12,10 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:padding="30dp"
-
+            android:id="@+id/imgIconSplashScreen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:padding="30dp"
             android:src="@drawable/icondri" />
 
 

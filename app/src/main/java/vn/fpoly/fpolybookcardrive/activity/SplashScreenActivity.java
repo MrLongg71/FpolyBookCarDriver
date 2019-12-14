@@ -115,7 +115,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         animatorSetRight.play(objectAnimatorRight);
         animatorSetRight.start();
 
-        Animation animation = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.fadein);
+        Animation animation = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.fadeinwithtranslate);
 
 
         new Handler().postDelayed(new Runnable() {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -19,15 +20,17 @@ import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.view.splashscreen.home.FragmentHome;
 
-public class FragmentPay extends Fragment{
+public class FragmentPayCar extends Fragment{
     private TextView txtNameCustomer,txtRecive,txtDestination,txtDistance,txtPrice,txtTotal,txtDate;
     private Button btnProceed;
+    private LinearLayout lineTotalAmout;
 
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView( LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pay, container, false);
+        View view = inflater.inflate(R.layout.fragment_paycar, container, false);
         initView(view);
+        lineTotalAmout.setVisibility(View.GONE);
         HomeActivity.bottomNavigationView.setVisibility(View.GONE);
         OrderCar orderCar;
         Bundle bundle = getArguments();
@@ -62,6 +65,7 @@ public class FragmentPay extends Fragment{
         btnProceed      = view.findViewById(R.id.btnProceedConclusion);
         txtDate         = view.findViewById(R.id.txtDate);
         btnProceed      = view.findViewById(R.id.btnProceedConclusion);
+        lineTotalAmout  = view.findViewById(R.id.lineTotalAmount);
     }
 
 

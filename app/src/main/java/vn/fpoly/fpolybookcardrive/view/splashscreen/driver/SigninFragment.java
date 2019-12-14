@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +24,7 @@ import vn.fpoly.fpolybookcardrive.library.Dialog;
 
 
 public class SigninFragment extends Fragment implements IViewLogin {
-    private TextInputEditText tieEmail,tiePass;
+    private EditText tieEmail,tiePass;
     private PresenterLogin presenterLogin;
     private Button btnLogin;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -34,7 +35,7 @@ public class SigninFragment extends Fragment implements IViewLogin {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmentlogin, container, false);
         initView(view);
-        tieEmail.setText("driver3@gmail.com");
+        tieEmail.setText("driver2@gmail.com");
         tiePass.setText("123456");
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,15 +50,19 @@ import java.util.Objects;
 import vn.fpoly.fpolybookcardrive.BuildConfig;
 import vn.fpoly.fpolybookcardrive.Constans;
 import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.library.Dialog;
 import vn.fpoly.fpolybookcardrive.model.objectclass.Driver;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
+import vn.fpoly.fpolybookcardrive.model.objectclass.OrderFood;
 import vn.fpoly.fpolybookcardrive.presenter.maps.PresenterGoogleMap;
+import vn.fpoly.fpolybookcardrive.presenter.orderfood.PresenterOrderFood;
 import vn.fpoly.fpolybookcardrive.service.FirebaseCloudMessage;
-import vn.fpoly.fpolybookcardrive.view.splashscreen.other.FragmentPay;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.other.FragmentBillFoodDetail;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.other.FragmentPayCar;
 
 
 public class FragmentHome extends Fragment implements
-        IViewHome,OnMapReadyCallback {
+        IViewHome,OnMapReadyCallback,IViewOrderFood {
     private LinearLayout linearLayout,linearLayoutPickUpCustomer,linearLayoutDropOffCustomer;
     private ImageButton imageButton;
     private Switch aSwitch;
@@ -68,8 +71,10 @@ public class FragmentHome extends Fragment implements
     private boolean checked = false;
     private LatLng locationGo,locationCome,locationcurent;
     private PresenterGoogleMap presenterGoogleMap;
-    private TextView txtPickUp,txtDestination,txtEstimatePrice,txtKm;
-    private RelativeLayout btnCall,btnChat;
+    private PresenterOrderFood presenterBillDetail;
+    private TextView txtPickUp,txtDestination,txtEstimatePrice,txtKm,txtDenyFood,txtNameRestaurant
+            ,txtAddressRestaurant,txtSendCustomer,txtTotalFood,txtDistanceFood,txtDateFood,txtTimeFood,txtNameCustomerFood;
+    private RelativeLayout btnCall,btnChat,btnAcceptFood;
     private int clickCount = 0;
     private LocationManager locationManager;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -79,7 +84,7 @@ public class FragmentHome extends Fragment implements
     private AlertDialog alertDialog;
     private OrderCar ordercar = new OrderCar();
     private Driver driverr = new Driver();
-
+    String idOrder;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -127,6 +132,7 @@ public class FragmentHome extends Fragment implements
         btnDropOff                  = view.findViewById(R.id.btnDropOff);
         btnChat                     = view.findViewById(R.id.relativeChat);
         linearLayoutDropOffCustomer = view.findViewById(R.id.dialog_dropoffCustomer);
+        presenterBillDetail = new PresenterOrderFood(this);
 
     }
 
@@ -341,9 +347,9 @@ public class FragmentHome extends Fragment implements
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constans.KEY_BUNDEL_ORDER,ordercar);
                 bundle.putString(Constans.KEY_BUNDEL_NAMECUSTOMER,namecustomer);
-                FragmentPay fragmentPay = new FragmentPay();
-                fragmentPay.setArguments(bundle);
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPay).commit();
+                FragmentPayCar fragmentPayCar = new FragmentPayCar();
+                fragmentPayCar.setArguments(bundle);
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPayCar).commit();
                 alertDialog.dismiss();
             }
         });
@@ -357,16 +363,84 @@ public class FragmentHome extends Fragment implements
         databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("status").setValue(false);
     }
 
+
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (driverr.isStatus() && !driverr.isWorking()) {
-                String idOrder = intent.getStringExtra("idOrder");
+            String event = intent.getStringExtra("event");
+            assert event != null;
+            if (driverr.isStatus() && !driverr.isWorking() && event.equals("1") ) {
+                idOrder = intent.getStringExtra("idOrder");
                 presenterGoogleMap.getOrderCar(idOrder, Uid);
                 dialogPickUpCar();
             }
-            String id = intent.getStringExtra("isBookCar");
-            Log.d("aaaaa",id+"");
+            if ( event.equals("2")){
+                idOrder = intent.getStringExtra("idOrder");
+                presenterBillDetail.getOrderFood(Uid,idOrder);
+                dialogPickUpFood();
+            }
+
         }
     };
+    private void dialogPickUpFood(){
+        final AlertDialog.Builder builder =new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+        LayoutInflater layoutInflater = getLayoutInflater();
+        @SuppressLint("InflateParams") View viewDialogPickUpFood = layoutInflater.inflate(R.layout.custom_dialog_pickup_food, null);
+        builder.setView(viewDialogPickUpFood);
+        txtDenyFood             = viewDialogPickUpFood.findViewById(R.id.txtDenyFood);
+        txtSendCustomer         = viewDialogPickUpFood.findViewById(R.id.txtSendCustomer);
+        txtTotalFood            = viewDialogPickUpFood.findViewById(R.id.txtTotalFood);
+        txtDistanceFood         = viewDialogPickUpFood.findViewById(R.id.txtDistanceFood);
+        txtNameRestaurant       = viewDialogPickUpFood.findViewById(R.id.txtNameRestaurant);
+        txtAddressRestaurant    = viewDialogPickUpFood.findViewById(R.id.txtAddressRestaurant);
+        btnAcceptFood           = viewDialogPickUpFood.findViewById(R.id.btnAcceptFood);
+        txtDateFood             = viewDialogPickUpFood.findViewById(R.id.txtDateFood);
+        txtNameCustomerFood     = viewDialogPickUpFood.findViewById(R.id.txtNameCustomerFood);
+        txtTimeFood             = viewDialogPickUpFood.findViewById(R.id.txtTimeFood);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.FadeInAnimation;
+        alertDialog.show();
+
+        btnAcceptFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("idOrder",idOrder);
+                bundle.putString("Uid",Uid);
+                FragmentBillFoodDetail fragmentBillFoodDetail  = new FragmentBillFoodDetail();
+                fragmentBillFoodDetail.setArguments(bundle);
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home,fragmentBillFoodDetail).commit();
+                alertDialog.dismiss();
+
+            }
+        });
+        txtDenyFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void displayOrderFood(OrderFood orderFood, String nameRestaurant, String nameCustomer) {
+        txtNameRestaurant.setText(nameRestaurant);
+        txtAddressRestaurant.setText(orderFood.getPlaceNameRes());
+        txtSendCustomer.setText(orderFood.getPlaceNameC());
+        txtTotalFood.setText(orderFood.getPrice()+"K");
+        txtDistanceFood.setText(orderFood.getDistance()+"Km");
+        txtDateFood.setText(orderFood.getDate());
+        txtNameCustomerFood.setText(nameCustomer);
+
+        String date = orderFood.getDate();
+        txtDateFood.setText(date.substring(0,date.indexOf(' ')));
+        txtTimeFood.setText(date.substring(date.indexOf(' ') + 1));
+
+
+    }
+
+
 }
