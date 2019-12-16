@@ -45,7 +45,7 @@ public class PresenterLogin implements IPresenterLogin {
 
                         }
                     };
-                    databaseReference.addValueEventListener(valueEventListener);
+                    databaseReference.addListenerForSingleValueEvent(valueEventListener);
 
                 }else {
                     iViewLogin.onFail(task.getException().getMessage());

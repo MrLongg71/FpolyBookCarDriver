@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -89,7 +90,8 @@ public class FragmentHome extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
-        Uid = Objects.requireNonNull(getActivity()).getIntent().getStringExtra("Uid");
+        Uid =  FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         getToken();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver, new IntentFilter("myFunction"));
         mapFragment.getMapAsync(this);
@@ -229,7 +231,6 @@ public class FragmentHome extends Fragment implements
             @Override
             public void onClick(View v) {
                 databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("working").setValue(true);
-                if (driverr.isWorking()) {
                     dialogContactCustomer();
                     addMarkerCustomer_LocationCome(locationGo, "Customer", R.drawable.iconraisehand);
                     addMarkerCustomer_LocationCome(locationCome, "Destination", R.drawable.iconyellow);
@@ -240,7 +241,6 @@ public class FragmentHome extends Fragment implements
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 100);
                     map.animateCamera(cameraUpdate);
                     alertDialog.dismiss();
-                }
 
 
             }
@@ -264,7 +264,7 @@ public class FragmentHome extends Fragment implements
     @SuppressLint("MissingPermission")
     private void getLocationDriver() {
         String provider = BuildConfig.DEBUG ? LocationManager.GPS_PROVIDER : LocationManager.NETWORK_PROVIDER;
-        locationManager.requestLocationUpdates(provider, 5000L
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000L
                 , 500.0F, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
@@ -366,7 +366,7 @@ public class FragmentHome extends Fragment implements
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            getToken();
             String event = intent.getStringExtra("event");
             assert event != null;
             if (driverr.isStatus() && !driverr.isWorking() && event.equals("1")) {

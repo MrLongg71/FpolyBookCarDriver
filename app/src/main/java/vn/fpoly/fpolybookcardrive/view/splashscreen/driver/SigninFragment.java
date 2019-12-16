@@ -28,7 +28,6 @@ public class SigninFragment extends Fragment implements IViewLogin {
     private EditText tieEmail,tiePass;
     private PresenterLogin presenterLogin;
     private Button btnLogin;
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Nullable
     @Override
@@ -41,7 +40,7 @@ public class SigninFragment extends Fragment implements IViewLogin {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog.DialogLoading(getActivity(),true);
+//                Dialog.DialogLoading(getActivity(),true);
 
                 checkValid();
 
@@ -60,10 +59,8 @@ public class SigninFragment extends Fragment implements IViewLogin {
 
     @Override
     public void onSuccess() {
-        Dialog.DialogLoading(getActivity(),false);
-        String Uid =  firebaseAuth.getCurrentUser().getUid();
+//        Dialog.DialogLoading(getActivity(),false);
         Intent intent = new Intent(getActivity(),HomeActivity.class);
-        intent.putExtra("Uid",Uid);
         startActivity(intent);
         getActivity().finish();
 
@@ -73,7 +70,7 @@ public class SigninFragment extends Fragment implements IViewLogin {
     public void onFail(String message) {
 
         //hàm viết dialog có vấn đề, không dismiss đuwojc, check lại nhanh lâm dăn mậo
-        Dialog.DialogLoading(getActivity(),false);
+//        Dialog.DialogLoading(getActivity(),false);
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
     }

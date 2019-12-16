@@ -46,7 +46,6 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
             intent.putExtra("event", remoteMessage.getData().get("event"));
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-//            showNotification(remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"));
             showNotification(getApplicationContext(),remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"),intent);
 
         }
@@ -82,7 +81,13 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
 
     private void sendTokenToServer(String s) {
 
-        dataDriver.child(Constans.childDriver).child("Car").child(auth.getCurrentUser().getUid()).child("token").setValue(s);
+        try {
+            dataDriver.child(Constans.childDriver).child("Car").child(auth.getCurrentUser().getUid()).child("token").setValue(s);
+
+        }catch (Exception e){
+
+        }
+
 
 
     }
