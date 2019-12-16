@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +44,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.Constants;
 
 
 import java.util.Objects;
@@ -86,7 +89,7 @@ public class FragmentHome extends Fragment implements
     private GoogleMap map;
     private SupportMapFragment mapFragment;
     private String keyOrder, Uid, namecustomer,phonecustomer;
-    private AlertDialog alertDialog;
+
     private OrderCar ordercar = new OrderCar();
     private Driver driverr = new Driver();
     String idOrder;
@@ -96,7 +99,8 @@ public class FragmentHome extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
-        Uid = Objects.requireNonNull(getActivity()).getIntent().getStringExtra("Uid");
+        Uid =  FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         getToken();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver, new IntentFilter("myFunction"));
 
@@ -209,7 +213,7 @@ public class FragmentHome extends Fragment implements
         txtDestination.setText(orderCar.getPlacenamecome());
         txtEstimatePrice.setText(orderCar.getPrice() + " K");
         txtKm.setText(orderCar.getDistance() + " Km");
-        alertDialog.show();
+
         locationCome = new LatLng(orderCar.getLatitudecome(), orderCar.getLongitudecome());
         locationGo = new LatLng(orderCar.getLatitudego(), orderCar.getLongitudego());
         keyOrder = orderCar.getKeyOrder();
@@ -230,14 +234,13 @@ public class FragmentHome extends Fragment implements
         txtEstimatePrice            = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
         txtKm                       = viewDialogPickUp.findViewById(R.id.txtKm);
         builder.setView(viewDialogPickUp);
-        alertDialog = builder.create();
+         final AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
-
+        alertDialog.show();
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("working").setValue(true);
-                if (driverr.isWorking()) {
                     dialogContactCustomer();
                     addMarkerCustomer_LocationCome(locationGo, "Customer", R.drawable.iconraisehand);
                     addMarkerCustomer_LocationCome(locationCome, "Destination", R.drawable.iconyellow);
@@ -248,7 +251,6 @@ public class FragmentHome extends Fragment implements
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 100);
                     map.animateCamera(cameraUpdate);
                     alertDialog.dismiss();
-                }
 
 
             }
@@ -281,6 +283,10 @@ public class FragmentHome extends Fragment implements
                         double longitude = location.getLongitude();
                         String placeNameCurrent = "You are here!";
                         locationcurent = new LatLng(latitude, longitude);
+
+                        databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("longitude").setValue(locationcurent.longitude);
+                        databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("latitude").setValue(locationcurent.latitude);
+
                         addMarkerDriver(locationcurent, placeNameCurrent);
                         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurent, 14);
                         map.moveCamera(cameraUpdate);
@@ -337,7 +343,6 @@ public class FragmentHome extends Fragment implements
             public void onClick(View view) {
                 dialogDropOffCustomer();
                 linearLayoutPickUpCustomer.setVisibility(View.GONE);
-                alertDialog.dismiss();
 
             }
         });
@@ -357,7 +362,7 @@ public class FragmentHome extends Fragment implements
                 FragmentPayCar fragmentPayCar = new FragmentPayCar();
                 fragmentPayCar.setArguments(bundle);
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPayCar).commit();
-                alertDialog.dismiss();
+
             }
         });
 
@@ -377,6 +382,7 @@ public class FragmentHome extends Fragment implements
 
             String event = intent.getStringExtra("event");
             assert event != null;
+
             if (driverr.isStatus() && !driverr.isWorking() && event.equals("1")) {
                 idOrder = intent.getStringExtra("idOrder");
                 presenterGoogleMap.getOrderCar(idOrder, Uid);
@@ -477,5 +483,4 @@ public class FragmentHome extends Fragment implements
         iSMS.setData(Uri.parse("sms:"+phonecustomer));
         startActivity(iSMS);
     }
-
 }

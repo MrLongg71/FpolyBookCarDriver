@@ -48,7 +48,6 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
             intent.putExtra("event", remoteMessage.getData().get("event"));
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-//            showNotification(remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"));
             showNotification(getApplicationContext(),remoteMessage.getData().get("idOrder"), remoteMessage.getData().get("idDriver"),intent);
 
         }
@@ -84,7 +83,13 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
 
     private void sendTokenToServer(String s) {
 
-        dataDriver.child(Constans.childDriver).child("Car").child(auth.getCurrentUser().getUid()).child("token").setValue(s);
+        try {
+            dataDriver.child(Constans.childDriver).child("Car").child(auth.getCurrentUser().getUid()).child("token").setValue(s);
+
+        }catch (Exception e){
+
+        }
+
 
 
     }
@@ -97,8 +102,11 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
         String channelName = "Channel Name";
         int importance = NotificationManager.IMPORTANCE_HIGH;
 
-        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.ringvngo);
-
+        Uri soundUri = Uri.parse(
+                "android.resource://" +
+                        getApplicationContext().getPackageName() +
+                        "/" +
+                        R.raw.ringvngo);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(
                     channelId, channelName, importance);
@@ -112,7 +120,7 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
-                .setContentTitle("VNGO")
+                .setContentTitle("VNGo")
                 .setSmallIcon(R.drawable.icondri)
                 .setSound(soundUri)
                 .setContentText("You just got a new pickup!!");

@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.activity.HomeActivity;
+import vn.fpoly.fpolybookcardrive.library.Dialog;
 import vn.fpoly.fpolybookcardrive.presenter.driver.PresenterLogin;
 
 
@@ -25,20 +26,19 @@ public class SigninFragment extends Fragment implements IViewLogin {
     private EditText tieEmail,tiePass;
     private PresenterLogin presenterLogin;
     private Button btnLogin;
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmentlogin, container, false);
         initView(view);
-        tieEmail.setText("driver2@gmail.com");
+        tieEmail.setText("driver3@gmail.com");
         tiePass.setText("123456");
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Dialog.DialogLoading(getActivity(),true);
+                Dialog.DialogLoading(getActivity(),true);
                 checkValid();
 
 
@@ -56,18 +56,25 @@ public class SigninFragment extends Fragment implements IViewLogin {
 
     @Override
     public void onSuccess() {
-//        Dialog.DialogLoading(getActivity(),false);
+        Dialog.DialogLoading(getActivity(),false);
+
 //        String Uid =  firebaseAuth.getCurrentUser().getUid();
 //        Intent intent = new Intent(getActivity(),HomeActivity.class);
 //        intent.putExtra("Uid",Uid);
 //        startActivity(intent);
 //        getActivity().finish();
+
+        Intent intent = new Intent(getActivity(),HomeActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+
+
     }
 
     @Override
     public void onFail(String message) {
 
-//        Dialog.DialogLoading(getActivity(),false);
+        Dialog.DialogLoading(getActivity(),false);
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
     }
@@ -93,14 +100,24 @@ public class SigninFragment extends Fragment implements IViewLogin {
             return true;
         }else {
             presenterLogin.doSignin(Email,Pass);
-            String Uid =  firebaseAuth.getCurrentUser().getUid();
-            Intent intent = new Intent(getActivity(),HomeActivity.class);
-            intent.putExtra("Uid",Uid);
-            startActivity(intent);
-            getActivity().finish();
+
         }
 
         return false;
     }
 
+    @Override
+    public void onDestroy() {
+        Dialog.DialogLoading(getActivity(),false);
+        super.onDestroy();
+
+    }
+
+
+    @Override
+    public void onPause() {
+        Dialog.DialogLoading(getActivity(),false);
+        super.onPause();
+
+    }
 }

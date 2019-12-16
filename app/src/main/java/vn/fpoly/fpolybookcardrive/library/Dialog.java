@@ -20,7 +20,8 @@ public class Dialog  {
         if (loading){
             progressDialog.show();
         }else {
-            progressDialog.dismiss();
+
+            progressDialog.hide();
         }
     }
 }

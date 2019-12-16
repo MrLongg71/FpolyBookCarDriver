@@ -13,11 +13,16 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Objects;
 
 import vn.fpoly.fpolybookcardrive.activity.HomeActivity;
 import vn.fpoly.fpolybookcardrive.Constans;
 import vn.fpoly.fpolybookcardrive.R;
+import vn.fpoly.fpolybookcardrive.model.objectclass.NotificationRV;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 import vn.fpoly.fpolybookcardrive.view.splashscreen.home.FragmentHome;
 
@@ -25,6 +30,7 @@ public class FragmentPayCar extends Fragment{
     private TextView txtNameCustomer,txtRecive,txtDestination,txtDistance,txtPrice,txtTotal,txtDate;
     private Button btnProceed;
     private LinearLayout lineTotalAmout;
+    private OrderCar orderCar;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -33,8 +39,8 @@ public class FragmentPayCar extends Fragment{
         initView(view);
         lineTotalAmout.setVisibility(View.GONE);
         HomeActivity.bottomNavigationView.setVisibility(View.GONE);
-        OrderCar orderCar;
-        Bundle bundle = getArguments();
+
+        final Bundle bundle = getArguments();
         if (bundle != null){
             String nameCustomer = bundle.getString(Constans.KEY_BUNDEL_NAMECUSTOMER);
             orderCar = bundle.getParcelable(Constans.KEY_BUNDEL_ORDER);
@@ -49,7 +55,17 @@ public class FragmentPayCar extends Fragment{
         btnProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 startActivity(new Intent(getActivity(),HomeActivity.class));
+
+                DatabaseReference databaseReference  = FirebaseDatabase.getInstance().getReference();
+                NotificationRV notificationRV = new NotificationRV(orderCar.getKeyclient(),orderCar.getKeyOrder());
+
+                databaseReference.child("notificationRV").push().setValue(notificationRV);
+
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_home,new FragmentHome()).commit();
+
 
             }
         });
