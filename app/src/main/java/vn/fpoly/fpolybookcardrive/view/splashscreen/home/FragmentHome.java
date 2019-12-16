@@ -80,7 +80,6 @@ public class FragmentHome extends Fragment implements
     private GoogleMap map;
     private SupportMapFragment mapFragment;
     private String keyOrder, Uid, namecustomer;
-    private AlertDialog alertDialog;
     private OrderCar ordercar = new OrderCar();
     private Driver driverr = new Driver();
     String idOrder;
@@ -204,7 +203,6 @@ public class FragmentHome extends Fragment implements
         txtDestination.setText(orderCar.getPlacenamecome());
         txtEstimatePrice.setText(orderCar.getPrice() + " K");
         txtKm.setText(orderCar.getDistance() + " Km");
-        alertDialog.show();
         locationCome = new LatLng(orderCar.getLatitudecome(), orderCar.getLongitudecome());
         locationGo = new LatLng(orderCar.getLatitudego(), orderCar.getLongitudego());
         keyOrder = orderCar.getKeyOrder();
@@ -224,8 +222,9 @@ public class FragmentHome extends Fragment implements
         txtEstimatePrice = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
         txtKm = viewDialogPickUp.findViewById(R.id.txtKm);
         builder.setView(viewDialogPickUp);
-        alertDialog = builder.create();
+        final AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,7 +328,6 @@ public class FragmentHome extends Fragment implements
             public void onClick(View view) {
                 dialogDropOffCustomer();
                 linearLayoutPickUpCustomer.setVisibility(View.GONE);
-                alertDialog.dismiss();
 
             }
         });
@@ -349,7 +347,6 @@ public class FragmentHome extends Fragment implements
                 FragmentPayCar fragmentPayCar = new FragmentPayCar();
                 fragmentPayCar.setArguments(bundle);
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentPayCar).commit();
-                alertDialog.dismiss();
             }
         });
 

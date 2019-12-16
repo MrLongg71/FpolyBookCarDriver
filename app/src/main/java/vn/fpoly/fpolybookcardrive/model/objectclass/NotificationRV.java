@@ -1,11 +1,20 @@
 package vn.fpoly.fpolybookcardrive.model.objectclass;
 
 public class NotificationRV {
-    private String idClient,idOrder;
+    private String idClient,idOrder,event;
 
-    public NotificationRV(String idClient, String idOrder) {
+    public NotificationRV(String idClient, String idOrder, String event) {
         this.idClient = idClient;
         this.idOrder = idOrder;
+        this.event = event;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 
     public NotificationRV() {

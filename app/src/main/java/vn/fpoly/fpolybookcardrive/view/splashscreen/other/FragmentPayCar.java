@@ -55,7 +55,7 @@ public class FragmentPayCar extends Fragment{
             @Override
             public void onClick(View view) {
                 DatabaseReference databaseReference  = FirebaseDatabase.getInstance().getReference();
-                NotificationRV notificationRV = new NotificationRV(orderCar.getKeyclient(),orderCar.getKeyOrder());
+                NotificationRV notificationRV = new NotificationRV(orderCar.getKeyclient(),orderCar.getKeyOrder(),"1");
 
                 databaseReference.child("notificationRV").push().setValue(notificationRV);
 
