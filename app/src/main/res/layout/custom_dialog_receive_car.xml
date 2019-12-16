@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/imgIconapp"
-                    android:text="GO-BIKE"
+                    android:text="VNGO-BIKE"
                     android:textColor="#fff"
                     android:textSize="18dp"
                     android:textStyle="bold">
@@ -63,7 +63,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="DENY"
+                    android:text="@string/deny"
                     android:textColor="#FF0000"
                     android:textSize="18dp"
                     android:textStyle="bold">
@@ -113,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:gravity="bottom"
-                            android:text="Pick up/Recive"
+                            android:text="@string/pick_up_recive"
                             android:textColor="#03A9F4"
                             android:textSize="16dp"
                             android:textStyle="bold">
@@ -125,7 +125,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:id="@+id/txtPickUp"
-                            android:text="117/Nguyen Đình Chiều,P6,Q3"
+                            android:text="@string/_117_nguyen_nh_chi_u_p6_q3"
                             android:textColor="#000000"
                             android:textSize="16dp">
 
@@ -161,7 +161,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:gravity="bottom"
-                            android:text="Destination"
+                            android:text="@string/destination"
                             android:textColor="#E67E22"
                             android:textSize="16dp"
                             android:textStyle="bold">
@@ -213,7 +213,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ESTIMATED PRICE" />
+                        android:text="@string/estimated_price" />
 
                     <TextView
                         android:id="@+id/txtEstimatePrice"
@@ -237,7 +237,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TRIP DETAILS" />
+                        android:text="@string/estimated_km" />
 
                     <TextView
                         android:id="@+id/txtKm"
@@ -254,10 +254,6 @@
         </androidx.cardview.widget.CardView>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
 
             <RelativeLayout
                 android:id="@+id/btnAccept"
@@ -274,7 +270,7 @@
                     android:id="@+id/txtAccept"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ACCEPT"
+                    android:text="@string/accept"
                     android:textColor="#fff"
                     android:textSize="18dp">
 
@@ -290,7 +286,7 @@
 
             </RelativeLayout>
 
-        </RelativeLayout>
+
     </LinearLayout>
 
 </LinearLayout>

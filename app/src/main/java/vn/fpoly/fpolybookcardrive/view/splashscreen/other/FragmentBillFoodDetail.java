@@ -40,8 +40,9 @@ public class FragmentBillFoodDetail extends Fragment implements IViewBillDetail,
     private ArrayList<FoodMenu> arrFoodMenuu = new ArrayList<>();
     private Button btnFood;
     private ArrayList<BillFood>arrBillFood = new ArrayList<>();
-    int total = 0;
-    int totalBill = 0;
+    private int total = 0;
+    private int totalBill = 0;
+    String idOrder,Uid;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,9 +51,8 @@ public class FragmentBillFoodDetail extends Fragment implements IViewBillDetail,
 
         Bundle bundle = getArguments();
         if (bundle !=null){
-
-            String idOrder = bundle.getString("idOrder");
-            String Uid = bundle.getString("Uid");
+            idOrder =   bundle.getString("idOrder");
+             Uid = bundle.getString("Uid");
             presenterBillDetail.getOderBillDetail(Uid,idOrder);
         }
 
@@ -92,14 +92,20 @@ public class FragmentBillFoodDetail extends Fragment implements IViewBillDetail,
         FoodMenu foodMenu = arrFoodMenuu.get(i);
         txtAmount.setText(billFood.getAmountBuy() + " x " + foodMenu.getPrice());
         total = Integer.parseInt(foodMenu.getPrice()) * billFood.getAmountBuy();
-        txtTotal.setText(total + "");
+        txtTotal.setText(total +"K");
         totalBill +=total;
-        txtTotalBill.setText(totalBill + "");
-
+        txtTotalBill.setText(totalBill + "K");
         btnFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home,new FragmentPayFood()).commit();
+                Bundle bundle = new Bundle();
+                bundle.putString("amountGoods",arrBillFood.size()+"");
+                bundle.putString("total",totalBill+"");
+                bundle.putString("Uid",Uid);
+                bundle.putString("idOrder",idOrder);
+                FragmentPayFood fragmentPayFood = new FragmentPayFood();
+                fragmentPayFood.setArguments(bundle);
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home,fragmentPayFood).commit();
             }
         });
     }

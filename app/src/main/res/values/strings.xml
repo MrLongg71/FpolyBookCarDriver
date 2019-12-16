@@ -20,5 +20,12 @@
     <string name="bill_detail">Bill Detail</string>
     <string name="fotgot_password"><u>Fotgot password?</u></string>
     <string name="quantity_of_goods">Quantity of goods:</string>
+    <string name="estimated_price">ESTIMATED PRICE</string>
+    <string name="estimated_km">ESTIMATED Km</string>
+    <string name="destination">Destination</string>
+    <string name="pick_up_recive">Pick up/Recive</string>
+    <string name="_117_nguyen_nh_chi_u_p6_q3">117/Nguyen Đình Chiều,P6,Q3</string>
+    <string name="deny">DENY</string>
+    <string name="accept">ACCEPT</string>
 
 </resources>

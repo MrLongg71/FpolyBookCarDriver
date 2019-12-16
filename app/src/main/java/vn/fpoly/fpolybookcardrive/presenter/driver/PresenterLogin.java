@@ -1,4 +1,4 @@
-package vn.fpoly.fpolybookcardrive.view.splashscreen.driver;
+package vn.fpoly.fpolybookcardrive.presenter.driver;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import vn.fpoly.fpolybookcardrive.view.splashscreen.driver.IViewLogin;
 
 public class PresenterLogin implements IPresenterLogin {
     private IViewLogin iViewLogin;
@@ -34,6 +36,7 @@ public class PresenterLogin implements IPresenterLogin {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             DataSnapshot rule = dataSnapshot.child("Client").child(firebaseAuth.getCurrentUser().getUid());
                             if(rule.exists()){
+
                                 iViewLogin.onFail("Mày có phải tài xế đâu mà login hả Lâm VĂn Mậ");
                             }else {
                                 iViewLogin.onSuccess();
@@ -45,7 +48,7 @@ public class PresenterLogin implements IPresenterLogin {
 
                         }
                     };
-                    databaseReference.addValueEventListener(valueEventListener);
+                    databaseReference.addListenerForSingleValueEvent(valueEventListener);
 
                 }else {
                     iViewLogin.onFail(task.getException().getMessage());

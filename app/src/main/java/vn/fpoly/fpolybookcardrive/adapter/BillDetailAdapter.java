@@ -52,21 +52,17 @@ public class BillDetailAdapter extends RecyclerView.Adapter<BillDetailAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int total = 0;
-        int amoutBill = 0;
-        int price = 0;
         BillFood billFood = arrBillFood.get(position);
         FoodMenu foodMenu = arrFoodMenu.get(position);
         holder.txtTitleItem.setText(foodMenu.getName());
-
         setTotal.initSetTotal(position,holder.txtTotalItem,holder.txtAmoutItem);
-
         setImage(foodMenu,holder.imgTitle);
     }
     private void setImage(final FoodMenu foodMenu, final RoundedImageView imageView){
-        storageReference.child("ImageRestaurantMenuFood").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        storageReference.child("ImageRestaurantMenuFood").child(foodMenu.getImage()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
+
                 foodMenu.setImage(uri.toString());
                 Glide.with(context).load(foodMenu.getImage()).into(imageView);
             }

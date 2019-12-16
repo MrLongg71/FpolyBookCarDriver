@@ -4,8 +4,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -95,19 +97,24 @@ public class FirebaseCloudMessage extends FirebaseMessagingService {
         String channelName = "Channel Name";
         int importance = NotificationManager.IMPORTANCE_HIGH;
 
+        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.ringvngo);
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(
                     channelId, channelName, importance);
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+            mChannel.setSound(soundUri, audioAttributes);
             notificationManager.createNotificationChannel(mChannel);
         }
 
-        Uri uriSound = Uri.parse("android.resource://"
-                + context.getPackageName() + "/" + R.raw.ringvngo);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
                 .setContentTitle("VNGO")
                 .setSmallIcon(R.drawable.icondri)
-                .setSound(uriSound)
+                .setSound(soundUri)
                 .setContentText("You just got a new pickup!!");
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);

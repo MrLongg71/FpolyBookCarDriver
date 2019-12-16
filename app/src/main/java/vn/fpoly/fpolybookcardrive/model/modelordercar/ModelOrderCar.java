@@ -61,9 +61,10 @@ public class ModelOrderCar {
                 OrderCar orderCar = nodeOrder.getValue(OrderCar.class);
                 DataSnapshot valuteNameCustomer = dataSnapshot.child(Constans.childClient).child(Objects.requireNonNull(orderCar).getKeyclient()).child("name");
                 String nameCustomer = valuteNameCustomer.getValue(String.class);
+                DataSnapshot valutePhoneCustomer = dataSnapshot.child(Constans.childClient).child(orderCar.getKeyclient()).child("phone");
+                String phoneCustomer = valutePhoneCustomer.getValue(String.class);
 
-
-                presenterGoogleMap.resultOrderCar(orderCar,nameCustomer);
+                presenterGoogleMap.resultOrderCar(orderCar,nameCustomer,phoneCustomer);
 
             }
 

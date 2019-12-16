@@ -30,8 +30,8 @@ public class PresenterGoogleMap  implements  IPresenterGoogleMap{
 
 
     @Override
-    public void resultOrderCar(OrderCar orderCar, String nameCustomer) {
-        ivIewHome.displayOrder(orderCar,nameCustomer);
+    public void resultOrderCar(OrderCar orderCar, String nameCustomer, String phoneCustomer) {
+        ivIewHome.displayOrder(orderCar,nameCustomer,phoneCustomer);
     }
 
 

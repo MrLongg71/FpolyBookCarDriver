@@ -9,12 +9,18 @@ import dmax.dialog.SpotsDialog;
 
 public class Dialog  {
     public static void DialogLoading(Context context, boolean loading) {
-        AlertDialog alertDialog = new SpotsDialog.Builder().setContext(context).build();
-        if(loading){
-            alertDialog.show();
+//        AlertDialog alertDialog = new SpotsDialog.Builder().setContext(context).build();
+//        if(loading){
+//            alertDialog.show();
+//        }else {
+//            alertDialog.dismiss();
+//        }
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Loading....");
+        if (loading){
+            progressDialog.show();
         }else {
-            Log.d("LONgKUTE", "DialogLoading: ");
-            alertDialog.dismiss();
+            progressDialog.dismiss();
         }
     }
 }

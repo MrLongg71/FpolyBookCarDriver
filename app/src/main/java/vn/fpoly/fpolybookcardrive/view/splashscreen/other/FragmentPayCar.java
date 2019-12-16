@@ -1,6 +1,7 @@
 package vn.fpoly.fpolybookcardrive.view.splashscreen.other;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +49,7 @@ public class FragmentPayCar extends Fragment{
         btnProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_home,new FragmentHome()).commit();
+                startActivity(new Intent(getActivity(),HomeActivity.class));
 
             }
         });

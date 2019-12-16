@@ -49,7 +49,6 @@ public class HomeActivity extends AppCompatActivity  {
 
     private void initView() {
         bottomNavigationView = findViewById(R.id.bottom);
-
     }
 
     private void loadFragment(Fragment fragment) {

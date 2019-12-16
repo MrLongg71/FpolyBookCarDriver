@@ -22,15 +22,6 @@ public class ModelOrderFood {
                 OrderFood orderFood = dataOrderFood.getValue(OrderFood.class);
                 DataSnapshot dataRetaurant = dataSnapshot.child(Constans.childRestaurant).child(orderFood.getKeyRestaurant()).child("name");
                 DataSnapshot dataClient = dataSnapshot.child(Constans.childClient).child(orderFood.getKeyClient()).child("name");
-//                DataSnapshot dataBillOrderFood = dataSnapshot.child(Constans.chilBillOrderFood).child(orderFood.getKeyBillDetail());
-//
-//                for (DataSnapshot valueBillOrderFood : dataBillOrderFood.getChildren()){
-//                    BillFood billFood = valueBillOrderFood.getValue(BillFood.class);
-//                    DataSnapshot dataFoodMenu = dataSnapshot.child(Constans.chilFood).child(orderFood.getKeyRestaurant()).child(billFood.getKeyFood());
-//                    arrBillDetail.add(billFood);
-//                    FoodMenu foodMenu = dataFoodMenu.getValue(FoodMenu.class);
-//                   arrFoodMenu.add(foodMenu);
-//                }
 
                 String nameCustomer = dataClient.getValue(String.class);
                 String nameRestaurant = dataRetaurant.getValue(String.class);

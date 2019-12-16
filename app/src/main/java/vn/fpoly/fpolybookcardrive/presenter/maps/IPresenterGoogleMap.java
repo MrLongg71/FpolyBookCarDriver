@@ -13,6 +13,6 @@ public interface IPresenterGoogleMap {
 
     void getPolyline(Activity activity,GoogleMap googleMap,LatLng locationGo,LatLng locationCome);
     void getOrderCar(String idOrder,String Uid);
-    void resultOrderCar(OrderCar orderCar, String nameCustomer);
+    void resultOrderCar(OrderCar orderCar, String nameCustomer,  String phoneCustomer);
 
 }

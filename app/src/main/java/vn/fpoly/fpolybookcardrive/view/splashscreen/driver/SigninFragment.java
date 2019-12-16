@@ -14,14 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.activity.HomeActivity;
-import vn.fpoly.fpolybookcardrive.library.Dialog;
+import vn.fpoly.fpolybookcardrive.presenter.driver.PresenterLogin;
 
 
 public class SigninFragment extends Fragment implements IViewLogin {
@@ -41,8 +38,7 @@ public class SigninFragment extends Fragment implements IViewLogin {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog.DialogLoading(getActivity(),true);
-
+//                Dialog.DialogLoading(getActivity(),true);
                 checkValid();
 
 
@@ -60,20 +56,18 @@ public class SigninFragment extends Fragment implements IViewLogin {
 
     @Override
     public void onSuccess() {
-        Dialog.DialogLoading(getActivity(),false);
-        String Uid =  firebaseAuth.getCurrentUser().getUid();
-        Intent intent = new Intent(getActivity(),HomeActivity.class);
-        intent.putExtra("Uid",Uid);
-        startActivity(intent);
-        getActivity().finish();
-
+//        Dialog.DialogLoading(getActivity(),false);
+//        String Uid =  firebaseAuth.getCurrentUser().getUid();
+//        Intent intent = new Intent(getActivity(),HomeActivity.class);
+//        intent.putExtra("Uid",Uid);
+//        startActivity(intent);
+//        getActivity().finish();
     }
 
     @Override
     public void onFail(String message) {
 
-        //hàm viết dialog có vấn đề, không dismiss đuwojc, check lại nhanh lâm dăn mậo
-        Dialog.DialogLoading(getActivity(),false);
+//        Dialog.DialogLoading(getActivity(),false);
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
     }
@@ -99,7 +93,11 @@ public class SigninFragment extends Fragment implements IViewLogin {
             return true;
         }else {
             presenterLogin.doSignin(Email,Pass);
-
+            String Uid =  firebaseAuth.getCurrentUser().getUid();
+            Intent intent = new Intent(getActivity(),HomeActivity.class);
+            intent.putExtra("Uid",Uid);
+            startActivity(intent);
+            getActivity().finish();
         }
 
         return false;

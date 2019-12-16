@@ -1,13 +1,16 @@
 package vn.fpoly.fpolybookcardrive.view.splashscreen.home;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +28,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -74,11 +79,13 @@ public class FragmentHome extends Fragment implements
     private TextView txtPickUp, txtDestination, txtEstimatePrice, txtKm, txtDenyFood, txtNameRestaurant, txtAddressRestaurant, txtSendCustomer, txtTotalFood, txtDistanceFood, txtDateFood, txtTimeFood, txtNameCustomerFood;
     private RelativeLayout btnCall, btnChat, btnAcceptFood;
     private int clickCount = 0;
+    private int REQUEST_CODE_CALL = 1;
+    private int REQUEST_CODE_SMS = 2;
     private LocationManager locationManager;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private GoogleMap map;
     private SupportMapFragment mapFragment;
-    private String keyOrder, Uid, namecustomer;
+    private String keyOrder, Uid, namecustomer,phonecustomer;
     private AlertDialog alertDialog;
     private OrderCar ordercar = new OrderCar();
     private Driver driverr = new Driver();
@@ -92,9 +99,10 @@ public class FragmentHome extends Fragment implements
         Uid = Objects.requireNonNull(getActivity()).getIntent().getStringExtra("Uid");
         getToken();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver, new IntentFilter("myFunction"));
-        mapFragment.getMapAsync(this);
+
         aSwitch.setEnabled(false);
         getLocationDriver();
+        mapFragment.getMapAsync(this);
         return view;
     }
 
@@ -117,21 +125,21 @@ public class FragmentHome extends Fragment implements
     }
 
     private void initView(View view) {
-        linearLayout = view.findViewById(R.id.lineralayout);
-        imageButton = view.findViewById(R.id.imgButton);
-        aSwitch = view.findViewById(R.id.swich);
-        imageView = view.findViewById(R.id.imgThunder);
-        locationManager = Objects.requireNonNull(getActivity()).getSystemService(LocationManager.class);
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        presenterGoogleMap = new PresenterGoogleMap(this);
-        linearLayoutPickUpCustomer = view.findViewById(R.id.dialog_pickUpCustomer);
-        btnArrive = view.findViewById(R.id.btnArrive);
-        btnCall = view.findViewById(R.id.relativeCall);
-        btnPickUp = view.findViewById(R.id.btnPickUp);
-        btnDropOff = view.findViewById(R.id.btnDropOff);
-        btnChat = view.findViewById(R.id.relativeChat);
-        linearLayoutDropOffCustomer = view.findViewById(R.id.dialog_dropoffCustomer);
-        presenterBillDetail = new PresenterOrderFood(this);
+        linearLayout                    = view.findViewById(R.id.lineralayout);
+        imageButton                     = view.findViewById(R.id.imgButton);
+        aSwitch                         = view.findViewById(R.id.swich);
+        imageView                       = view.findViewById(R.id.imgThunder);
+        locationManager                 = Objects.requireNonNull(getActivity()).getSystemService(LocationManager.class);
+        mapFragment                     = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        presenterGoogleMap              = new PresenterGoogleMap(this);
+        linearLayoutPickUpCustomer      = view.findViewById(R.id.dialog_pickUpCustomer);
+        btnArrive                       = view.findViewById(R.id.btnArrive);
+        btnCall                         = view.findViewById(R.id.relativeCall);
+        btnPickUp                       = view.findViewById(R.id.btnPickUp);
+        btnDropOff                      = view.findViewById(R.id.btnDropOff);
+        btnChat                         = view.findViewById(R.id.relativeChat);
+        linearLayoutDropOffCustomer     = view.findViewById(R.id.dialog_dropoffCustomer);
+        presenterBillDetail             = new PresenterOrderFood(this);
 
     }
 
@@ -141,7 +149,7 @@ public class FragmentHome extends Fragment implements
         map = googleMap;
         map.getUiSettings().setCompassEnabled(true);
         map.setMyLocationEnabled(true);
-        getLocationDriver();
+
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
     }
@@ -189,7 +197,6 @@ public class FragmentHome extends Fragment implements
 
     }
 
-
     @Override
     public void drawPolyline() {
         presenterGoogleMap.getPolyline(getActivity(), map, locationcurent, locationGo);
@@ -197,7 +204,7 @@ public class FragmentHome extends Fragment implements
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void displayOrder(OrderCar orderCar, String nameCustomer) {
+    public void displayOrder(OrderCar orderCar, String nameCustomer, String phoneCustomer) {
         txtPickUp.setText(orderCar.getPlacenamego());
         txtDestination.setText(orderCar.getPlacenamecome());
         txtEstimatePrice.setText(orderCar.getPrice() + " K");
@@ -208,6 +215,7 @@ public class FragmentHome extends Fragment implements
         keyOrder = orderCar.getKeyOrder();
         ordercar = orderCar;
         namecustomer = nameCustomer;
+        phonecustomer = phoneCustomer;
 
     }
 
@@ -215,12 +223,12 @@ public class FragmentHome extends Fragment implements
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         LayoutInflater layoutInflater = getLayoutInflater();
         @SuppressLint("InflateParams") View viewDialogPickUp = layoutInflater.inflate(R.layout.custom_dialog_receive_car, null);
-        txtPickUp = viewDialogPickUp.findViewById(R.id.txtPickUp);
-        txtDestination = viewDialogPickUp.findViewById(R.id.txtDestination);
-        RelativeLayout btnAccept = viewDialogPickUp.findViewById(R.id.btnAccept);
-        TextView txtDeny = viewDialogPickUp.findViewById(R.id.txtDeny);
-        txtEstimatePrice = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
-        txtKm = viewDialogPickUp.findViewById(R.id.txtKm);
+        txtPickUp                   = viewDialogPickUp.findViewById(R.id.txtPickUp);
+        txtDestination              = viewDialogPickUp.findViewById(R.id.txtDestination);
+        RelativeLayout btnAccept    = viewDialogPickUp.findViewById(R.id.btnAccept);
+        TextView txtDeny            = viewDialogPickUp.findViewById(R.id.txtDeny);
+        txtEstimatePrice            = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
+        txtKm                       = viewDialogPickUp.findViewById(R.id.txtKm);
         builder.setView(viewDialogPickUp);
         alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
@@ -315,13 +323,13 @@ public class FragmentHome extends Fragment implements
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Call", Toast.LENGTH_SHORT).show();
+                callCustomer();
             }
         });
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Chat", Toast.LENGTH_SHORT).show();
+                chatSMSCustomer();
             }
         });
         btnPickUp.setOnClickListener(new View.OnClickListener() {
@@ -388,16 +396,16 @@ public class FragmentHome extends Fragment implements
         LayoutInflater layoutInflater = getLayoutInflater();
         @SuppressLint("InflateParams") View viewDialogPickUpFood = layoutInflater.inflate(R.layout.custom_dialog_pickup_food, null);
         builder.setView(viewDialogPickUpFood);
-        txtDenyFood = viewDialogPickUpFood.findViewById(R.id.txtDenyFood);
-        txtSendCustomer = viewDialogPickUpFood.findViewById(R.id.txtSendCustomer);
-        txtTotalFood = viewDialogPickUpFood.findViewById(R.id.txtTotalFood);
-        txtDistanceFood = viewDialogPickUpFood.findViewById(R.id.txtDistanceFood);
-        txtNameRestaurant = viewDialogPickUpFood.findViewById(R.id.txtNameRestaurant);
-        txtAddressRestaurant = viewDialogPickUpFood.findViewById(R.id.txtAddressRestaurant);
-        btnAcceptFood = viewDialogPickUpFood.findViewById(R.id.btnAcceptFood);
-        txtDateFood = viewDialogPickUpFood.findViewById(R.id.txtDateFood);
-        txtNameCustomerFood = viewDialogPickUpFood.findViewById(R.id.txtNameCustomerFood);
-        txtTimeFood = viewDialogPickUpFood.findViewById(R.id.txtTimeFood);
+        txtDenyFood             = viewDialogPickUpFood.findViewById(R.id.txtDenyFood);
+        txtSendCustomer         = viewDialogPickUpFood.findViewById(R.id.txtSendCustomer);
+        txtTotalFood            = viewDialogPickUpFood.findViewById(R.id.txtTotalFood);
+        txtDistanceFood         = viewDialogPickUpFood.findViewById(R.id.txtDistanceFood);
+        txtNameRestaurant       = viewDialogPickUpFood.findViewById(R.id.txtNameRestaurant);
+        txtAddressRestaurant    = viewDialogPickUpFood.findViewById(R.id.txtAddressRestaurant);
+        btnAcceptFood           = viewDialogPickUpFood.findViewById(R.id.btnAcceptFood);
+        txtDateFood             = viewDialogPickUpFood.findViewById(R.id.txtDateFood);
+        txtNameCustomerFood     = viewDialogPickUpFood.findViewById(R.id.txtNameCustomerFood);
+        txtTimeFood             = viewDialogPickUpFood.findViewById(R.id.txtTimeFood);
         final AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().getAttributes().windowAnimations = R.style.FadeInAnimation;
@@ -440,8 +448,34 @@ public class FragmentHome extends Fragment implements
         txtDateFood.setText(date.substring(0, date.indexOf(' ')));
         txtTimeFood.setText(date.substring(date.indexOf(' ') + 1));
 
-
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_CALL && grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+            callCustomer();
+        }
+    }
+
+
+    private void callCustomer(){
+        if (Objects.requireNonNull(getActivity()).checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},REQUEST_CODE_CALL);
+        }
+        Intent iCall = new Intent();
+        iCall.setAction(Intent.ACTION_CALL);
+        iCall.setData(Uri.parse("tel:"+phonecustomer));
+        startActivity(iCall);
+    }
+    private void chatSMSCustomer(){
+        if (Objects.requireNonNull(getActivity()).checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},REQUEST_CODE_SMS);
+        }
+        Intent iSMS = new Intent();
+        iSMS.setAction(Intent.ACTION_SENDTO);
+        iSMS.setData(Uri.parse("sms:"+phonecustomer));
+        startActivity(iSMS);
+    }
 
 }

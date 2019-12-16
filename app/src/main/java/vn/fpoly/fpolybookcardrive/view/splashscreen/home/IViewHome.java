@@ -7,5 +7,5 @@ import vn.fpoly.fpolybookcardrive.model.objectclass.OrderCar;
 
 public interface IViewHome {
     void drawPolyline();
-    void displayOrder(OrderCar orderCar, String nameCustomer);
+    void displayOrder(OrderCar orderCar, String nameCustomer,  String phoneCustomer);
 }
