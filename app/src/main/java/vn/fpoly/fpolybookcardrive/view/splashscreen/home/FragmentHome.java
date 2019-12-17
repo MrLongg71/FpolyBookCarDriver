@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +90,6 @@ public class FragmentHome extends Fragment implements
     private GoogleMap map;
     private SupportMapFragment mapFragment;
     private String keyOrder, Uid, namecustomer,phonecustomer;
-
     private OrderCar ordercar = new OrderCar();
     private Driver driverr = new Driver();
     String idOrder;
@@ -209,7 +209,8 @@ public class FragmentHome extends Fragment implements
     @SuppressLint("SetTextI18n")
     @Override
     public void displayOrder(OrderCar orderCar, String nameCustomer, String phoneCustomer) {
-        txtPickUp.setText(orderCar.getPlacenamego());
+        Log.d("ttttt",""+orderCar.getPlacenamego());
+
         txtDestination.setText(orderCar.getPlacenamecome());
         txtEstimatePrice.setText(orderCar.getPrice() + " K");
         txtKm.setText(orderCar.getDistance() + " Km");
@@ -218,50 +219,65 @@ public class FragmentHome extends Fragment implements
         locationGo = new LatLng(orderCar.getLatitudego(), orderCar.getLongitudego());
         keyOrder = orderCar.getKeyOrder();
         ordercar = orderCar;
+        txtPickUp.setText(ordercar.getPlacenamego());
         namecustomer = nameCustomer;
         phonecustomer = phoneCustomer;
 
     }
 
     private void dialogPickUpCar() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        LayoutInflater layoutInflater = getLayoutInflater();
-        @SuppressLint("InflateParams") View viewDialogPickUp = layoutInflater.inflate(R.layout.custom_dialog_receive_car, null);
-        txtPickUp                   = viewDialogPickUp.findViewById(R.id.txtPickUp);
-        txtDestination              = viewDialogPickUp.findViewById(R.id.txtDestination);
-        RelativeLayout btnAccept    = viewDialogPickUp.findViewById(R.id.btnAccept);
-        TextView txtDeny            = viewDialogPickUp.findViewById(R.id.txtDeny);
-        txtEstimatePrice            = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
-        txtKm                       = viewDialogPickUp.findViewById(R.id.txtKm);
-        builder.setView(viewDialogPickUp);
-         final AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("working").setValue(true);
+        if (getActivity() !=null){
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater layoutInflater = getLayoutInflater();
+            @SuppressLint("InflateParams") View viewDialogPickUp = layoutInflater.inflate(R.layout.custom_dialog_receive_car, null);
+            txtPickUp                   = viewDialogPickUp.findViewById(R.id.txtPickUp);
+            txtDestination              = viewDialogPickUp.findViewById(R.id.txtDestination);
+            RelativeLayout btnAccept    = viewDialogPickUp.findViewById(R.id.btnAccept);
+            TextView txtDeny            = viewDialogPickUp.findViewById(R.id.txtDeny);
+            txtEstimatePrice            = viewDialogPickUp.findViewById(R.id.txtEstimatePrice);
+            txtKm                       = viewDialogPickUp.findViewById(R.id.txtKm);
+            builder.setView(viewDialogPickUp);
+
+//       new Handler().postDelayed(new Runnable() {
+//           @Override
+//           public void run() {
+//
+//           }
+//       },2000);
+
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+
+            btnAccept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("working").setValue(true);
                     dialogContactCustomer();
                     addMarkerCustomer_LocationCome(locationGo, "Customer", R.drawable.iconraisehand);
                     addMarkerCustomer_LocationCome(locationCome, "Destination", R.drawable.iconyellow);
 
                     drawPolyline();
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    builder.include(locationGo).include(locationCome);
+                    builder.include(locationGo).include(locationcurent);
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 100);
                     map.animateCamera(cameraUpdate);
                     alertDialog.dismiss();
 
 
-            }
-        });
-        txtDeny.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
+                }
+            });
+            txtDeny.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertDialog.dismiss();
+                }
+            });
+        }
     }
+
+
+
 
     private void addMarkerCustomer_LocationCome(LatLng location, String place, int icon) {
         map.addMarker(new MarkerOptions()
@@ -287,9 +303,14 @@ public class FragmentHome extends Fragment implements
                         databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("longitude").setValue(locationcurent.longitude);
                         databaseReference.child(Constans.childDriver).child("Car").child(Uid).child("latitude").setValue(locationcurent.latitude);
 
-                        addMarkerDriver(locationcurent, placeNameCurrent);
-                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurent, 14);
-                        map.moveCamera(cameraUpdate);
+                        try {
+                            addMarkerDriver(locationcurent, placeNameCurrent);
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(locationcurent, 14);
+                            map.moveCamera(cameraUpdate);
+                        } catch (Exception e) {
+
+                        }
+
                     }
 
                     @Override
@@ -330,6 +351,7 @@ public class FragmentHome extends Fragment implements
             @Override
             public void onClick(View view) {
                 callCustomer();
+                Log.d("aaaaaa",""+phonecustomer);
             }
         });
         btnChat.setOnClickListener(new View.OnClickListener() {
@@ -387,6 +409,8 @@ public class FragmentHome extends Fragment implements
                 idOrder = intent.getStringExtra("idOrder");
                 presenterGoogleMap.getOrderCar(idOrder, Uid);
                 dialogPickUpCar();
+
+
             }
             if (event.equals("2")) {
                 idOrder = intent.getStringExtra("idOrder");
@@ -398,44 +422,47 @@ public class FragmentHome extends Fragment implements
     };
 
     private void dialogPickUpFood() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        LayoutInflater layoutInflater = getLayoutInflater();
-        @SuppressLint("InflateParams") View viewDialogPickUpFood = layoutInflater.inflate(R.layout.custom_dialog_pickup_food, null);
-        builder.setView(viewDialogPickUpFood);
-        txtDenyFood             = viewDialogPickUpFood.findViewById(R.id.txtDenyFood);
-        txtSendCustomer         = viewDialogPickUpFood.findViewById(R.id.txtSendCustomer);
-        txtTotalFood            = viewDialogPickUpFood.findViewById(R.id.txtTotalFood);
-        txtDistanceFood         = viewDialogPickUpFood.findViewById(R.id.txtDistanceFood);
-        txtNameRestaurant       = viewDialogPickUpFood.findViewById(R.id.txtNameRestaurant);
-        txtAddressRestaurant    = viewDialogPickUpFood.findViewById(R.id.txtAddressRestaurant);
-        btnAcceptFood           = viewDialogPickUpFood.findViewById(R.id.btnAcceptFood);
-        txtDateFood             = viewDialogPickUpFood.findViewById(R.id.txtDateFood);
-        txtNameCustomerFood     = viewDialogPickUpFood.findViewById(R.id.txtNameCustomerFood);
-        txtTimeFood             = viewDialogPickUpFood.findViewById(R.id.txtTimeFood);
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.getWindow().getAttributes().windowAnimations = R.style.FadeInAnimation;
-        alertDialog.show();
+        if (getActivity()!= null){
+            final AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+            LayoutInflater layoutInflater = getLayoutInflater();
+            @SuppressLint("InflateParams") View viewDialogPickUpFood = layoutInflater.inflate(R.layout.custom_dialog_pickup_food, null);
+            builder.setView(viewDialogPickUpFood);
+            txtDenyFood             = viewDialogPickUpFood.findViewById(R.id.txtDenyFood);
+            txtSendCustomer         = viewDialogPickUpFood.findViewById(R.id.txtSendCustomer);
+            txtTotalFood            = viewDialogPickUpFood.findViewById(R.id.txtTotalFood);
+            txtDistanceFood         = viewDialogPickUpFood.findViewById(R.id.txtDistanceFood);
+            txtNameRestaurant       = viewDialogPickUpFood.findViewById(R.id.txtNameRestaurant);
+            txtAddressRestaurant    = viewDialogPickUpFood.findViewById(R.id.txtAddressRestaurant);
+            btnAcceptFood           = viewDialogPickUpFood.findViewById(R.id.btnAcceptFood);
+            txtDateFood             = viewDialogPickUpFood.findViewById(R.id.txtDateFood);
+            txtNameCustomerFood     = viewDialogPickUpFood.findViewById(R.id.txtNameCustomerFood);
+            txtTimeFood             = viewDialogPickUpFood.findViewById(R.id.txtTimeFood);
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.getWindow().getAttributes().windowAnimations = R.style.FadeInAnimation;
+            alertDialog.show();
 
-        btnAcceptFood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("idOrder", idOrder);
-                bundle.putString("Uid", Uid);
-                FragmentBillFoodDetail fragmentBillFoodDetail = new FragmentBillFoodDetail();
-                fragmentBillFoodDetail.setArguments(bundle);
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentBillFoodDetail).commit();
-                alertDialog.dismiss();
+            btnAcceptFood.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("idOrder", idOrder);
+                    bundle.putString("Uid", Uid);
+                    FragmentBillFoodDetail fragmentBillFoodDetail = new FragmentBillFoodDetail();
+                    fragmentBillFoodDetail.setArguments(bundle);
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frame_home, fragmentBillFoodDetail).commit();
+                    alertDialog.dismiss();
 
-            }
-        });
-        txtDenyFood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
+                }
+            });
+            txtDenyFood.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertDialog.dismiss();
+                }
+            });
+        }
+
 
     }
 
@@ -461,6 +488,20 @@ public class FragmentHome extends Fragment implements
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_CALL && grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
             callCustomer();
+            Intent iCall = new Intent();
+            iCall.setAction(Intent.ACTION_DIAL);
+            iCall.setData(Uri.parse("tel:"+phonecustomer));
+            Log.d("llll",""+phonecustomer);
+            startActivity(iCall);
+        }else if (requestCode == REQUEST_CODE_SMS && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            chatSMSCustomer();
+            Intent iSMS = new Intent();
+            iSMS.setAction(Intent.ACTION_SENDTO);
+            iSMS.setData(Uri.parse("sms:"+phonecustomer));
+            startActivity(iSMS);
+        }
+        else {
+            Toast.makeText(getActivity(), "You can't accept permission", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -468,19 +509,14 @@ public class FragmentHome extends Fragment implements
     private void callCustomer(){
         if (Objects.requireNonNull(getActivity()).checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},REQUEST_CODE_CALL);
+
         }
-        Intent iCall = new Intent();
-        iCall.setAction(Intent.ACTION_CALL);
-        iCall.setData(Uri.parse("tel:"+phonecustomer));
-        startActivity(iCall);
+
     }
     private void chatSMSCustomer(){
         if (Objects.requireNonNull(getActivity()).checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},REQUEST_CODE_SMS);
         }
-        Intent iSMS = new Intent();
-        iSMS.setAction(Intent.ACTION_SENDTO);
-        iSMS.setData(Uri.parse("sms:"+phonecustomer));
-        startActivity(iSMS);
+
     }
 }

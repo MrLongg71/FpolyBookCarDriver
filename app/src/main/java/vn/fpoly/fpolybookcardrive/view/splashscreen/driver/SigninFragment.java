@@ -32,8 +32,6 @@ public class SigninFragment extends Fragment implements IViewLogin {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmentlogin, container, false);
         initView(view);
-        tieEmail.setText("driver3@gmail.com");
-        tiePass.setText("123456");
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,12 +55,6 @@ public class SigninFragment extends Fragment implements IViewLogin {
     @Override
     public void onSuccess() {
         Dialog.DialogLoading(getActivity(),false);
-
-//        String Uid =  firebaseAuth.getCurrentUser().getUid();
-//        Intent intent = new Intent(getActivity(),HomeActivity.class);
-//        intent.putExtra("Uid",Uid);
-//        startActivity(intent);
-//        getActivity().finish();
 
         Intent intent = new Intent(getActivity(),HomeActivity.class);
         startActivity(intent);

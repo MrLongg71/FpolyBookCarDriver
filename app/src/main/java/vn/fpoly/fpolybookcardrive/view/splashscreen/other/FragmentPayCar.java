@@ -59,7 +59,7 @@ public class FragmentPayCar extends Fragment{
                 startActivity(new Intent(getActivity(),HomeActivity.class));
 
                 DatabaseReference databaseReference  = FirebaseDatabase.getInstance().getReference();
-                NotificationRV notificationRV = new NotificationRV(orderCar.getKeyclient(),orderCar.getKeyOrder());
+                NotificationRV notificationRV = new NotificationRV(orderCar.getKeyclient(),orderCar.getKeyOrder(),"1");
 
                 databaseReference.child("notificationRV").push().setValue(notificationRV);
 

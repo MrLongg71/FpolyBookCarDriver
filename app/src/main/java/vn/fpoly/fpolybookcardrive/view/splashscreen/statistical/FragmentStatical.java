@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -15,16 +16,20 @@ import com.google.android.material.tabs.TabLayout;
 
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.adapter.TablayoutStatisticsAdapter;
+import vn.fpoly.fpolybookcardrive.library.CallBackFragment;
 
 public class FragmentStatical extends Fragment {
     private RecyclerView recyclerViewStatistical;
     private ViewPager viewPager;
+    private FragmentManager fragmentManager;
     private TabLayout tabLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistical, container, false);
+        fragmentManager = getActivity().getSupportFragmentManager();
+        CallBackFragment.CallbackHome(view,fragmentManager);
         initView(view);
         initTabLayout(view);
         return view;

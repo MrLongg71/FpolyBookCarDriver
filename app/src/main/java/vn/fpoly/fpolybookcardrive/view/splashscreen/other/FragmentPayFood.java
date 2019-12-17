@@ -20,6 +20,7 @@ import vn.fpoly.fpolybookcardrive.Constans;
 import vn.fpoly.fpolybookcardrive.R;
 import vn.fpoly.fpolybookcardrive.model.objectclass.OrderFood;
 import vn.fpoly.fpolybookcardrive.presenter.orderfood.PresenterOrderFood;
+import vn.fpoly.fpolybookcardrive.view.splashscreen.home.FragmentHome;
 import vn.fpoly.fpolybookcardrive.view.splashscreen.home.IViewOrderFood;
 
 public class FragmentPayFood extends Fragment implements IViewOrderFood {
@@ -77,7 +78,7 @@ public class FragmentPayFood extends Fragment implements IViewOrderFood {
             @Override
             public void onClick(View view) {
                 databaseReference.child(Constans.childOrderFood).child(Uid).child(orderFood.getKeyBillDetail()).child("finish").setValue(true);
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_home,new FragmentHome()).commit();
             }
         });
 
