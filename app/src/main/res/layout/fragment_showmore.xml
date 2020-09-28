@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:background="#fff"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="10dp"
+            android:elevation="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Driver">
+
+                    </TextView>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/backgroud">
+
+                    </de.hdodenhof.circleimageview.CircleImageView>
+
+                    <TextView
+                        android:id="@+id/txtRateDriver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/ic_star_black_24dp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtNameDriver"
+                    android:textColor="#000"
+                    android:textSize="25sp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Nguyễn Văn B"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+             <LinearLayout
+                 android:layout_marginTop="10dp"
+                 android:orientation="horizontal"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+                 <TextView
+                     android:layout_weight="1"
+                     android:textColor="#000"
+                     android:textSize="18sp"
+                    android:id="@+id/txtEmailDriver"
+                     android:gravity="center"
+                     android:text="abc@gmail.com"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+
+                 </TextView>
+                 <TextView
+                     android:id="@+id/txtPhoneDriver"
+                     android:layout_weight="1"
+                     android:textColor="#000"
+                     android:textSize="18sp"
+
+                     android:gravity="center"
+                     android:text="036584567"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+                 </TextView>
+
+             </LinearLayout>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/txtLinse"
+                    android:layout_weight="1"
+                    android:textColor="#000"
+                    android:textSize="18sp"
+
+                    android:gravity="center"
+                    android:text="036584567"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </TextView>
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>

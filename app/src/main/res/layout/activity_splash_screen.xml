@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_splash"
-        android:gravity="center"
+        android:layout_marginTop="100dp"
+
         android:orientation="vertical">
 
 
-        <TextView
-            style="@style/AppTheme.TextView"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:text="DRIVER"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:textColor="#fff"
-            android:textSize="50dp"
-            android:textStyle="bold" />
+            android:layout_margin="10dp"
+            android:src="@drawable/icondri">
+
+        </ImageView>
 
         <LinearLayout
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <RelativeLayout
                 android:layout_width="match_parent"

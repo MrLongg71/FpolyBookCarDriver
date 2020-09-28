@@ -1,3 +1,31 @@
 <resources>
-    <string name="app_name">FPolyBookCarDriver</string>
+    <string name="app_name">VNGO</string>
+    <string name="google_map_api">AIzaSyAiuTJQXphAGVYtw3zHY_ANAiMEASvEPZY</string>
+    <string name="google_map_parseJson">AIzaSyBEEZyII00wNkF7Fcm6FXmomWt5A6RaDEo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="distance">km</string>
+    <string name="chat">Chat</string>
+    <string name="call">Call</string>
+    <string name="arrive">arrive</string>
+    <string name="pick_up">Pick up</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+
+    <string name="total">Total</string>
+
+    <string name="order_food">Order Food</string>
+    <string name="order_car">Order Car</string>
+    <string name="bill_detail">Bill Detail</string>
+    <string name="fotgot_password"><u>Fotgot password?</u></string>
+    <string name="quantity_of_goods">Quantity of goods:</string>
+    <string name="estimated_price">ESTIMATED PRICE</string>
+    <string name="estimated_km">ESTIMATED Km</string>
+    <string name="destination">Destination</string>
+    <string name="pick_up_recive">Pick up/Recive</string>
+    <string name="_117_nguyen_nh_chi_u_p6_q3">117/Nguyen Đình Chiều,P6,Q3</string>
+    <string name="deny">DENY</string>
+    <string name="accept">ACCEPT</string>
+
 </resources>

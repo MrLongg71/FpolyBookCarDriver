@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/selectitemhome"
+        android:title="Home">
+
+    </item>
+    <item
+        android:id="@+id/statistical"
+        android:icon="@drawable/selectiteminsert"
+        android:title="Statistical">
+
+    </item>
+
+    <item
+        android:id="@+id/showMore"
+        android:icon="@drawable/selectitemmore"
+        android:title="More">
+
+    </item>
+
+</menu>
